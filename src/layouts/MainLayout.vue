@@ -82,9 +82,9 @@ const linksList = [
   },
 ];
 
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
 
-export default defineComponent({
+export default {
   name: "MainLayout",
 
   components: {
@@ -102,5 +102,5 @@ export default defineComponent({
       },
     };
   },
-});
+};
 </script>
