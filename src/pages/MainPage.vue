@@ -1,14 +1,15 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-    <TrainingProgram />
+  <q-page class="row items-center justify-center">
+    <TrainingProgram v-if="isTrainingProgram" v-model="isTrainingCycle" />
 
-    <TrainingCycle />
+    <TrainingCycle v-if="isTrainingCycle" />
 
-    <TrainingCalendar />
+    <TrainingCalendar v-if="isTrainingCalendar" />
   </q-page>
 </template>
 
 <script>
+import { ref } from 'vue';
 import TrainingProgram from '../components/TrainingProgram.vue';
 import TrainingCycle from '../components/TrainingCycle.vue';
 import TrainingCalendar from '../components/TrainingCalendar.vue';
@@ -21,7 +22,15 @@ export default {
     TrainingCalendar,
   },
   setup() {
-    return {};
+    const isTrainingProgram = ref(true);
+    const isTrainingCycle = ref(false);
+    const isTrainingCalendar = ref(false);
+
+    return {
+      isTrainingProgram,
+      isTrainingCycle,
+      isTrainingCalendar,
+    };
   },
 };
 </script>

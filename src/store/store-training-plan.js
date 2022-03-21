@@ -123,6 +123,9 @@ const getters = {
   getPrepareTrainingPlan(state) {
     return state.prepareTrainingPlan;
   },
+  getTrainingPlan(state) {
+    return state.prepareTrainingPlan.trainingPlan;
+  },
 };
 
 export default {

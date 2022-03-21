@@ -63,6 +63,7 @@ import { date } from 'quasar';
 export default {
   setup() {
     const store = useStore();
+    const isAddExercise = ref(false);
 
     const dateNow = ref(date.formatDate(Date.now(), 'YYYY/MM/DD'));
 
@@ -74,6 +75,7 @@ export default {
       () => store.getters['storeTrainingPlan/getAllExercisesDates']
     );
     return {
+      isAddExercise,
       allExercisesDates,
       dateNow,
       allExercises,
