@@ -1,62 +1,81 @@
 <template>
-  <div class="q-pa-md" style="max-width: 300px">
-    <q-input
-      filled
-      v-model="startTrainingPlanPeriod"
-      mask="date"
-      :rules="['date']"
-      hint="Начало тренировочного цикла"
-    >
-      <template v-slot:append>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy
-            ref="qDateProxy"
-            cover
-            transition-show="scale"
-            transition-hide="scale"
-          >
-            <q-date v-model="startTrainingPlanPeriod">
-              <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat />
-              </div>
-            </q-date>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
-
-    <q-input
-      filled
-      v-model="finishTrainingPlanPeriod"
-      mask="date"
-      :rules="['date']"
-      hint="Конец тренировочного цикла"
-    >
-      <template v-slot:append>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy
-            ref="qDateProxy"
-            cover
-            transition-show="scale"
-            transition-hide="scale"
-          >
-            <q-date v-model="finishTrainingPlanPeriod">
-              <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat />
-              </div>
-            </q-date>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
-  </div>
-
   <q-btn
-    v-if="!isGenTrainingCycle"
+    @click="isGenTrainingCycle = !isGenTrainingCycle"
     color="primary"
     label="Сгенерировать тренировочный цикл"
-    @click="genTrainingCycle"
+    no-caps
   />
+  <q-dialog v-model="isGenTrainingCycle">
+    <q-card>
+      <q-card-section>
+        <q-input
+          filled
+          v-model="startTrainingPlanPeriod"
+          mask="date"
+          :rules="['date']"
+          hint="Начало тренировочного цикла"
+        >
+          <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy
+                ref="qDateProxy"
+                cover
+                transition-show="scale"
+                transition-hide="scale"
+              >
+                <q-date v-model="startTrainingPlanPeriod">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Ok" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+
+        <q-input
+          filled
+          v-model="finishTrainingPlanPeriod"
+          mask="date"
+          :rules="['date']"
+          hint="Конец тренировочного цикла"
+        >
+          <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy
+                ref="qDateProxy"
+                cover
+                transition-show="scale"
+                transition-hide="scale"
+              >
+                <q-date v-model="finishTrainingPlanPeriod">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Ok" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+
+        <div class="q-mt-md">
+          <q-btn
+            label="OK"
+            @click="genTrainingCycle"
+            color="primary"
+            v-close-popup
+          />
+          <q-btn
+            label="Отмена"
+            color="primary"
+            flat
+            class="q-ml-sm"
+            v-close-popup
+          />
+        </div>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
@@ -66,7 +85,9 @@ import { useStore } from 'vuex';
 
 export default {
   name: 'TrainingCycle',
-  setup() {
+  props: ['modelValue'],
+  emits: ['update:modelValue', 'update:isTrainingProgram'],
+  setup(props, context) {
     const store = useStore();
     const isGenTrainingCycle = ref(false);
     const startTrainingPlanPeriod = ref(
@@ -79,6 +100,14 @@ export default {
     );
 
     const genTrainingCycle = () => {
+      const trainingPlanPeriod = {
+        start: startTrainingPlanPeriod.value,
+        finish: finishTrainingPlanPeriod.value,
+      };
+      store.dispatch(
+        'storeTrainingPlan/setTrainingPlanPeriod',
+        trainingPlanPeriod
+      );
       const prepareTrainingPlan = computed(
         () => store.getters['storeTrainingPlan/getPrepareTrainingPlan']
       );
@@ -164,9 +193,9 @@ export default {
           startTrainingPlanPeriodDate.getDate() + 1
         );
       }
-
       store.dispatch('storeTrainingPlan/setTrainingCycle', readyTrainingCycle);
-      isGenTrainingCycle.value = true;
+      context.emit('update:modelValue', true);
+      context.emit('update:isTrainingProgram', false);
     };
 
     return {

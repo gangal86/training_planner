@@ -1,8 +1,15 @@
 <template>
-  <q-page class="row items-center justify-center">
-    <TrainingProgram v-if="isTrainingProgram" v-model="isTrainingCycle" />
+  <q-page class="column items-center">
+    <TrainingProgram 
+      v-if="isTrainingProgram" 
+      v-model="isTrainingCycle" 
+    />
 
-    <TrainingCycle v-if="isTrainingCycle" />
+    <TrainingCycle
+      v-if="isTrainingCycle && !isTrainingCalendar"
+      v-model="isTrainingCalendar"
+      @update:isTrainingProgram="isTrainingProgram = $event"
+    />
 
     <TrainingCalendar v-if="isTrainingCalendar" />
   </q-page>

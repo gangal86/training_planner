@@ -4,6 +4,7 @@
       @click="isAddExercise = !isAddExercise"
       label="Добавить упражнение"
       color="primary"
+      no-caps
     />
     <q-item
       v-for="exercise in trainingPlan"

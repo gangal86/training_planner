@@ -1,8 +1,8 @@
 const state = () => ({
   prepareTrainingPlan: {
     trainingPlanPeriod: {
-      start: '2022/03/14',
-      finish: '2022/04/30',
+      // start: '2022/03/14',
+      // finish: '2022/04/30',
     },
     trainingPlan: [
       // {
@@ -101,6 +101,10 @@ const mutations = {
   },
   addExercise(state, payload) {
     state.prepareTrainingPlan.trainingPlan.push(payload);
+  },
+  setTrainingPlanPeriod(state, payload) {
+    state.prepareTrainingPlan.trainingPlanPeriod.start = payload.start;
+    state.prepareTrainingPlan.trainingPlanPeriod.finish = payload.finish;
   }
 };
 
@@ -110,6 +114,9 @@ const actions = {
   },
   addExercise({ commit }, payload) {
     commit('addExercise', payload);
+  },
+  setTrainingPlanPeriod({ commit }, payload) {
+    commit('setTrainingPlanPeriod', payload);
   }
 };
 
