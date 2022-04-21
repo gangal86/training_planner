@@ -1,16 +1,19 @@
 {
   "name": "training_planner",
-  "version": "0.0.1",
-  "description": "A Quasar Framework app",
-  "productName": "Quasar App",
-  "author": "Roman Gangal <gangal33@gmail.com>",
+  "version": "1.0.0",
+  "description": "Training Planner",
+  "productName": "Training Planner",
+  "author": "Roman Gangal https://gangal.pro",
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
-    "test": "echo \"No test specified\" && exit 0"
+    "android-dev": "quasar dev -m cordova -T android",
+    "android-build-apk": "quasar build -m cordova -T android -- --buildConfig=\"../build.cordova.json\" -- --packageType=apk",
+    "android-build-bundle": "quasar build -m cordova -T android -- --buildConfig=\"../build.cordova.json\" -- --packageType=bundle"
   },
   "dependencies": {
+    "@quasar/cli": "^1.3.2",
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
