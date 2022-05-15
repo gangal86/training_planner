@@ -156,9 +156,10 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { uid } from 'quasar';
 import { useStore } from 'vuex';
+import { useNotifSchedule } from 'src/use/useNotifSchedule';
 
 export default {
   name: 'TrainingProgram',
@@ -166,6 +167,7 @@ export default {
   emits: ['update:modelValue'],
   setup(props, context) {
     const store = useStore();
+    const { cordovaNotifSchedule } = useNotifSchedule();
     const isAddExercise = ref(false);
     const exerciseName = ref('');
     const trainingDay = ref('');
@@ -252,6 +254,10 @@ export default {
       isAddExercise.value = false;
     };
 
+    onMounted(() => {
+        cordovaNotifSchedule();
+    });
+
     return {
       isAddExercise,
       exerciseName,
@@ -266,7 +272,7 @@ export default {
       additionalWeightOptions,
       trainingPlan,
       addExercise,
-      resetForm,
+      resetForm
     };
   },
 };
