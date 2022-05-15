@@ -82,6 +82,7 @@
 import { ref, computed } from 'vue';
 import { date, uid } from 'quasar';
 import { useStore } from 'vuex';
+import { useNotifSchedule } from 'src/use/useNotifSchedule';
 
 export default {
   name: 'TrainingCycle',
@@ -89,6 +90,7 @@ export default {
   emits: ['update:modelValue', 'update:isTrainingProgram'],
   setup(props, context) {
     const store = useStore();
+    const { cordovaNotifSchedule } = useNotifSchedule();
     const isGenTrainingCycle = ref(false);
     const startTrainingPlanPeriod = ref(
       date.formatDate(Date.now(), 'YYYY/MM/DD')
@@ -196,6 +198,7 @@ export default {
       store.dispatch('storeTrainingPlan/setTrainingCycle', readyTrainingCycle);
       context.emit('update:modelValue', true);
       context.emit('update:isTrainingProgram', false);
+      cordovaNotifSchedule();
     };
 
     return {

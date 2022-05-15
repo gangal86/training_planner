@@ -1,3 +1,5 @@
+import { date } from 'quasar';
+
 const state = () => ({
   prepareTrainingPlan: {
     trainingPlanPeriod: {
@@ -59,8 +61,8 @@ const state = () => ({
     //   operatingWeight: '50',
     //   repetitionsNumber: '8',
     //   exerciseSetNumber: '3',
-    //   exerciseTime: '15:00',
-    //   exerciseDate: '2022/03/11',
+    //   exerciseTime: '17:00',
+    //   exerciseDate: '2022/05/12',
     // },
     // {
     //   id: 'id2',
@@ -70,7 +72,7 @@ const state = () => ({
     //   repetitionsNumber: '8',
     //   exerciseSetNumber: '3',
     //   exerciseTime: '15:00',
-    //   exerciseDate: '2022/03/16',
+    //   exerciseDate: '2022/05/16',
     // },
     // {
     //   id: 'id3',
@@ -79,8 +81,8 @@ const state = () => ({
     //   operatingWeight: '70',
     //   repetitionsNumber: '8',
     //   exerciseSetNumber: '3',
-    //   exerciseTime: '15:00',
-    //   exerciseDate: '2022/03/18',
+    //   exerciseTime: '14:10',
+    //   exerciseDate: '2022/05/15',
     // },
     // {
     //   id: 'id4',
@@ -89,8 +91,8 @@ const state = () => ({
     //   operatingWeight: '10',
     //   repetitionsNumber: '8',
     //   exerciseSetNumber: '3',
-    //   exerciseTime: '15:00',
-    //   exerciseDate: '2022/03/18',
+    //   exerciseTime: '14:11',
+    //   exerciseDate: '2022/05/15',
     // },
   ],
 });
@@ -105,7 +107,7 @@ const mutations = {
   setTrainingPlanPeriod(state, payload) {
     state.prepareTrainingPlan.trainingPlanPeriod.start = payload.start;
     state.prepareTrainingPlan.trainingPlanPeriod.finish = payload.finish;
-  }
+  },
 };
 
 const actions = {
@@ -117,7 +119,7 @@ const actions = {
   },
   setTrainingPlanPeriod({ commit }, payload) {
     commit('setTrainingPlanPeriod', payload);
-  }
+  },
 };
 
 const getters = {
@@ -132,6 +134,26 @@ const getters = {
   },
   getTrainingPlan(state) {
     return state.prepareTrainingPlan.trainingPlan;
+  },
+  getNotifyTrainingList(state) {
+    const dateNow = date.formatDate(Date.now(), 'YYYY/MM/DD');
+    let idCount = 1;
+    return state.trainingCycle
+      .filter(
+        (item) =>
+          new Date(item.exerciseDate).getTime() >=
+          new Date(dateNow).getTime()
+      )
+      .map((item) => {
+        return {
+          id: idCount++,
+          title: 'Тренировка',
+          text: 'Выполните упражнение - ' + item.exerciseName,
+          trigger: { at: new Date(item.exerciseDate +' '+item.exerciseTime) },
+          foreground: true,
+          vibrate: true
+        };
+      });
   },
 };
 
