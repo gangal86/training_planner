@@ -1,11 +1,5 @@
 <template>
   <q-list separator class="q-my-md">
-    <q-btn
-      @click="isAddExercise = !isAddExercise"
-      label="Добавить упражнение"
-      color="primary"
-      no-caps
-    />
     <q-item
       v-for="exercise in trainingPlan"
       :key="exercise.id"
@@ -153,6 +147,15 @@
       </q-card-section>
     </q-card>
   </q-dialog>
+
+  <q-page-sticky position="bottom" :offset="[18, 18]">
+    <q-btn
+      @click="isAddExercise = !isAddExercise"
+      fab
+      icon="add"
+      color="primary"
+    />
+  </q-page-sticky>
 </template>
 
 <script>
@@ -163,7 +166,7 @@ import { useNotifSchedule } from 'src/use/useNotifSchedule';
 
 export default {
   name: 'TrainingProgram',
-  props: ['modelValue'], 
+  props: ['modelValue'],
   emits: ['update:modelValue'],
   setup(props, context) {
     const store = useStore();
@@ -255,7 +258,7 @@ export default {
     };
 
     onMounted(() => {
-        cordovaNotifSchedule();
+      //cordovaNotifSchedule();
     });
 
     return {
@@ -272,7 +275,7 @@ export default {
       additionalWeightOptions,
       trainingPlan,
       addExercise,
-      resetForm
+      resetForm,
     };
   },
 };

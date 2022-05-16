@@ -1,4 +1,4 @@
-import { date } from 'quasar';
+import { date, LocalStorage } from 'quasar';
 
 const state = () => ({
   prepareTrainingPlan: {
@@ -6,7 +6,8 @@ const state = () => ({
       // start: '2022/03/14',
       // finish: '2022/04/30',
     },
-    trainingPlan: [
+    trainingPlan: LocalStorage.has('trainingPlan') ? LocalStorage.getItem('trainingPlan') : [],
+    //trainingPlan: [
       // {
       //   id: 'id1',
       //   exerciseName: 'Приседание',
@@ -51,9 +52,10 @@ const state = () => ({
       //   exerciseTime: '15:00',
       //   exerciseNotes: 'Подтягивание со своим весом',
       // },
-    ],
+    //],
   },
-  trainingCycle: [
+  trainingCycle: LocalStorage.has('trainingCycle') ? LocalStorage.getItem('trainingCycle') : [],
+  //trainingCycle: [
     // {
     //   id: 'id1',
     //   exerciseName: 'Приседание',
@@ -94,20 +96,37 @@ const state = () => ({
     //   exerciseTime: '14:11',
     //   exerciseDate: '2022/05/15',
     // },
-  ],
+  //],
+  isTrainingProgram: LocalStorage.has('isTrainingProgram') ? LocalStorage.getItem('isTrainingProgram') : true,
+  isTrainingCycle: LocalStorage.has('isTrainingCycle') ? LocalStorage.getItem('isTrainingCycle') : false,
+  isTrainingCalendar: LocalStorage.has('isTrainingCalendar') ? LocalStorage.getItem('isTrainingCalendar') : false,
 });
 
 const mutations = {
   setTrainingCycle(state, payload) {
     state.trainingCycle = payload;
+    LocalStorage.set('trainingCycle', state.trainingCycle);
   },
   addExercise(state, payload) {
     state.prepareTrainingPlan.trainingPlan.push(payload);
+    LocalStorage.set('trainingPlan', state.prepareTrainingPlan.trainingPlan);
   },
   setTrainingPlanPeriod(state, payload) {
     state.prepareTrainingPlan.trainingPlanPeriod.start = payload.start;
     state.prepareTrainingPlan.trainingPlanPeriod.finish = payload.finish;
   },
+  updateIsTrainingProgram(state, payload) {
+    state.isTrainingProgram = payload;
+    LocalStorage.set('isTrainingProgram', state.isTrainingProgram);
+  },
+  updateIsTrainingCycle(state, payload) {
+    state.isTrainingCycle = payload;
+    LocalStorage.set('isTrainingCycle', state.isTrainingCycle);
+  },
+  updateIsTrainingCalendar(state, payload) {
+    state.isTrainingCalendar = payload;
+    LocalStorage.set('isTrainingCalendar', state.isTrainingCalendar);
+  }
 };
 
 const actions = {
@@ -120,6 +139,15 @@ const actions = {
   setTrainingPlanPeriod({ commit }, payload) {
     commit('setTrainingPlanPeriod', payload);
   },
+  updateIsTrainingProgram({ commit }, payload) {
+    commit('updateIsTrainingProgram', payload);
+  },
+  updateIsTrainingCycle({ commit }, payload) {
+    commit('updateIsTrainingCycle', payload);
+  },
+  updateIsTrainingCalendar({ commit }, payload) {
+    commit('updateIsTrainingCalendar', payload);
+  }
 };
 
 const getters = {
@@ -155,6 +183,15 @@ const getters = {
         };
       });
   },
+  getIsTrainingProgram(state) {
+    return state.isTrainingProgram;
+  },
+  getIsTrainingCycle(state) {
+    return state.isTrainingCycle;
+  },
+  getIsTrainingCalendar(state) {
+    return state.isTrainingCalendar;
+  }
 };
 
 export default {

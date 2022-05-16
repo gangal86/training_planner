@@ -198,7 +198,7 @@ export default {
       store.dispatch('storeTrainingPlan/setTrainingCycle', readyTrainingCycle);
       context.emit('update:modelValue', true);
       context.emit('update:isTrainingProgram', false);
-      cordovaNotifSchedule();
+      //cordovaNotifSchedule();
     };
 
     return {

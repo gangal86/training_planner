@@ -12,19 +12,39 @@
         />
 
         <q-toolbar-title> Training Planner </q-toolbar-title>
-
       </q-toolbar>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label header> Essential Links </q-item-label>
+        <q-item-label header> Меню </q-item-label>
+        <q-item v-if="isTrainingCalendar" @click="editTrainingProgram" clickable>
+          <q-item-section avatar>
+            <q-icon name="edit" />
+          </q-item-section>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+          <q-item-section>
+            <q-item-label>Изменить тренировочный план</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item v-if="isTrainingCalendar" @click="deleteTrainingProgram" clickable>
+          <q-item-section avatar>
+            <q-icon name="delete" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Удалить тренировочный план</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable @click="showAboutProgram">
+          <q-item-section avatar>
+            <q-icon name="bookmark_border" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>О программе</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -35,71 +55,39 @@
 </template>
 
 <script>
-import EssentialLink from "components/EssentialLink.vue";
-
-const linksList = [
-  {
-    title: "Docs",
-    caption: "quasar.dev",
-    icon: "school",
-    link: "https://quasar.dev",
-  },
-  {
-    title: "Github",
-    caption: "github.com/quasarframework",
-    icon: "code",
-    link: "https://github.com/quasarframework",
-  },
-  {
-    title: "Discord Chat Channel",
-    caption: "chat.quasar.dev",
-    icon: "chat",
-    link: "https://chat.quasar.dev",
-  },
-  {
-    title: "Forum",
-    caption: "forum.quasar.dev",
-    icon: "record_voice_over",
-    link: "https://forum.quasar.dev",
-  },
-  {
-    title: "Twitter",
-    caption: "@quasarframework",
-    icon: "rss_feed",
-    link: "https://twitter.quasar.dev",
-  },
-  {
-    title: "Facebook",
-    caption: "@QuasarFramework",
-    icon: "public",
-    link: "https://facebook.quasar.dev",
-  },
-  {
-    title: "Quasar Awesome",
-    caption: "Community Quasar projects",
-    icon: "favorite",
-    link: "https://awesome.quasar.dev",
-  },
-];
-
-import { ref } from "vue";
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
-  name: "MainLayout",
-
-  components: {
-    EssentialLink,
-  },
-
+  name: 'MainLayout',
   setup() {
+    const store = useStore();
     const leftDrawerOpen = ref(false);
+    const isTrainingCalendar = computed(() => store.getters['storeTrainingPlan/getIsTrainingCalendar']);
+
+    const editTrainingProgram = () => {
+      console.log('editTrainingProgram');
+    };
+
+    const deleteTrainingProgram = () => {
+      console.log('deleteTrainingProgram');
+    };
+
+    const showAboutProgram = () => {
+      console.log('showAboutProgram');
+    };
+
+    const toggleLeftDrawer = () => {
+      leftDrawerOpen.value = !leftDrawerOpen.value;
+    };
 
     return {
-      essentialLinks: linksList,
       leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
+      isTrainingCalendar,
+      editTrainingProgram,
+      deleteTrainingProgram,
+      showAboutProgram,
+      toggleLeftDrawer,
     };
   },
 };

@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
 import TrainingProgram from '../components/TrainingProgram.vue';
 import TrainingCycle from '../components/TrainingCycle.vue';
 import TrainingCalendar from '../components/TrainingCalendar.vue';
@@ -29,9 +30,31 @@ export default {
     TrainingCalendar,
   },
   setup() {
-    const isTrainingProgram = ref(true);
-    const isTrainingCycle = ref(false);
-    const isTrainingCalendar = ref(false);
+    const store = useStore();
+    const isTrainingProgram = computed({
+      get() {
+        return store.getters['storeTrainingPlan/getIsTrainingProgram'];
+      },
+      set(value) {
+        store.dispatch('storeTrainingPlan/updateIsTrainingProgram', value);
+      },
+    });
+    const isTrainingCycle = computed({
+      get() {
+        return store.getters['storeTrainingPlan/getIsTrainingCycle'];
+      },
+      set(value) {
+        store.dispatch('storeTrainingPlan/updateIsTrainingCycle', value);
+      },
+    });
+    const isTrainingCalendar = computed({
+      get() {
+        return store.getters['storeTrainingPlan/getIsTrainingCalendar'];
+      },
+      set(value) {
+        store.dispatch('storeTrainingPlan/updateIsTrainingCalendar', value);
+      },
+    });
 
     return {
       isTrainingProgram,
