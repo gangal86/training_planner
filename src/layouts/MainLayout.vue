@@ -48,6 +48,8 @@
       </q-list>
     </q-drawer>
 
+    <AboutProgramDialog v-model="isAboutProgram" />
+
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -58,13 +60,19 @@
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useQuasar } from 'quasar'
+import AboutProgramDialog from 'components/dialogs/AboutProgramDialog.vue';
 
 export default {
   name: 'MainLayout',
+  components: {
+    AboutProgramDialog
+  },
   setup() {
     const store = useStore();
     const $q = useQuasar();
     const leftDrawerOpen = ref(false);
+    const isAboutProgram = ref(false);
+
     const isTrainingCycle = computed(() => store.getters['storeTrainingPlan/getIsTrainingCycle']);
 
     const editTrainingPlan = () => {
@@ -88,7 +96,7 @@ export default {
     };
 
     const showAboutProgram = () => {
-      console.log('showAboutProgram');
+      isAboutProgram.value = !isAboutProgram.value;
     };
 
     const toggleLeftDrawer = () => {
@@ -98,6 +106,7 @@ export default {
     return {
       leftDrawerOpen,
       isTrainingCycle,
+      isAboutProgram,
       editTrainingPlan,
       deleteTrainingPlan,
       showAboutProgram,

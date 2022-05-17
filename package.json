@@ -1,7 +1,7 @@
 {
   "name": "training_planner",
   "version": "1.0.0",
-  "description": "Training Planner",
+  "description": "Weightlifting training planner. Add your exercises and generate a training cycle.",
   "productName": "Training Planner",
   "author": "Roman Gangal https://gangal.pro",
   "private": true,
