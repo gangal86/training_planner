@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import TrainingProgram from '../components/TrainingProgram.vue';
 import TrainingCycle from '../components/TrainingCycle.vue';

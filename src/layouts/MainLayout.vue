@@ -18,7 +18,7 @@
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
         <q-item-label header> Меню </q-item-label>
-        <q-item v-if="isTrainingCalendar" @click="editTrainingProgram" clickable>
+        <q-item v-if="isTrainingCycle" @click="editTrainingPlan" clickable>
           <q-item-section avatar>
             <q-icon name="edit" />
           </q-item-section>
@@ -27,7 +27,7 @@
             <q-item-label>Изменить тренировочный план</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item v-if="isTrainingCalendar" @click="deleteTrainingProgram" clickable>
+        <q-item v-if="isTrainingCycle" @click="deleteTrainingPlan" clickable>
           <q-item-section avatar>
             <q-icon name="delete" />
           </q-item-section>
@@ -57,20 +57,34 @@
 <script>
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
+import { useQuasar } from 'quasar'
 
 export default {
   name: 'MainLayout',
   setup() {
     const store = useStore();
+    const $q = useQuasar();
     const leftDrawerOpen = ref(false);
-    const isTrainingCalendar = computed(() => store.getters['storeTrainingPlan/getIsTrainingCalendar']);
+    const isTrainingCycle = computed(() => store.getters['storeTrainingPlan/getIsTrainingCycle']);
 
-    const editTrainingProgram = () => {
-      console.log('editTrainingProgram');
+    const editTrainingPlan = () => {
+      store.dispatch('storeTrainingPlan/updateIsTrainingProgram', true);
+      store.dispatch('storeTrainingPlan/updateIsTrainingCycle', true);
+      store.dispatch('storeTrainingPlan/updateIsTrainingCalendar', false);
     };
 
-    const deleteTrainingProgram = () => {
-      console.log('deleteTrainingProgram');
+    const deleteTrainingPlan = () => {
+      $q.dialog({
+        title: 'Удалить тренировочный план',
+        message: 'Это действие необратимо',
+        cancel: {
+          flat: true,
+          label: 'отмена'
+        },
+        persistent: true
+      }).onOk(() => {
+        store.dispatch('storeTrainingPlan/deleteTrainingPlan');
+      });
     };
 
     const showAboutProgram = () => {
@@ -83,9 +97,9 @@ export default {
 
     return {
       leftDrawerOpen,
-      isTrainingCalendar,
-      editTrainingProgram,
-      deleteTrainingProgram,
+      isTrainingCycle,
+      editTrainingPlan,
+      deleteTrainingPlan,
       showAboutProgram,
       toggleLeftDrawer,
     };

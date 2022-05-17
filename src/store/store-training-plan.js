@@ -126,6 +126,20 @@ const mutations = {
   updateIsTrainingCalendar(state, payload) {
     state.isTrainingCalendar = payload;
     LocalStorage.set('isTrainingCalendar', state.isTrainingCalendar);
+  },
+  deleteTrainingPlan(state) {
+    console.log('mut_deleteTrainingPlan')
+    state.prepareTrainingPlan.trainingPlanPeriod = {};
+    state.prepareTrainingPlan.trainingPlan = [];
+    state.trainingCycle = [];
+    state.isTrainingProgram = true;
+    state.isTrainingCycle = false;
+    state.isTrainingCalendar = false;
+    LocalStorage.set('trainingPlan', state.prepareTrainingPlan.trainingPlan);
+    LocalStorage.set('trainingCycle', state.trainingCycle);
+    LocalStorage.set('isTrainingProgram', state.isTrainingProgram);
+    LocalStorage.set('isTrainingCycle', state.isTrainingCycle);
+    LocalStorage.set('isTrainingCalendar', state.isTrainingCalendar);
   }
 };
 
@@ -147,6 +161,9 @@ const actions = {
   },
   updateIsTrainingCalendar({ commit }, payload) {
     commit('updateIsTrainingCalendar', payload);
+  },
+  deleteTrainingPlan({ commit }) {
+    commit('deleteTrainingPlan');
   }
 };
 
