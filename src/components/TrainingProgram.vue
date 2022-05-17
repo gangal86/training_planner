@@ -1,12 +1,25 @@
 <template>
-  <q-list separator class="q-my-md">
+  <q-list separator style="margin: 80px 0px 80px 0px">
     <q-item
       v-for="exercise in trainingPlan"
       :key="exercise.id"
       clickable
       v-ripple
+      :class="{
+        'bg-light-blue-1': exercise.count % 2 === 0,
+        'bg-light-blue-2': exercise.count % 2 !== 0,
+      }"
     >
-      <q-item-section>{{ exercise.exerciseName }}</q-item-section>
+      <q-item-section>
+        <div>Упражнение №{{ exercise.count }}: <span class="text-weight-bold">{{ exercise.exerciseName }}</span></div>
+        <div>День тренировки: <span class="text-weight-bold">{{ exercise.trainingDayFull }}</span></div>
+        <div>Время тренировки: <span class="text-weight-bold">{{ exercise.exerciseTime }}</span></div>
+        <div>Стартовый вес: <span class="text-weight-bold">{{ exercise.startingWeight }} кг</span></div>
+        <div>Добавочный вес: <span class="text-weight-bold">{{ exercise.additionalWeight }} кг</span></div>
+        <div>Количество повторений: <span class="text-weight-bold">{{ exercise.repetitionsNumber }}</span></div>
+        <div>Количество подходов: <span class="text-weight-bold">{{ exercise.exerciseSetNumber }}</span></div>
+        <div>Заметки: <span class="text-weight-bold">{{ exercise.exerciseNotes }}</span></div>
+      </q-item-section>
     </q-item>
   </q-list>
 
@@ -22,9 +35,10 @@
             lazy-rules
             type="text"
             :rules="[
+              (val) => !!val || '* Пожалуйста введите название упражнения',
               (val) =>
-                (val && val.length > 0) ||
-                'Пожалуйста введите название упражнения',
+                val.length < 30 ||
+                'Пожалуйста используйте максимум 30 символов',
             ]"
           />
           <q-select
@@ -130,6 +144,11 @@
             label="Заметки"
             lazy-rules
             type="text"
+            :rules="[
+              (val) =>
+                val.length < 30 ||
+                'Пожалуйста используйте максимум 30 символов',
+            ]"
           />
 
           <div class="q-mt-md">
@@ -198,9 +217,24 @@ export default {
       '20',
       '25',
     ];
+    let countExercises = 1;
 
-    const trainingPlan = computed(
-      () => store.getters['storeTrainingPlan/getTrainingPlan']
+    const trainingPlan = computed(() =>
+      store.getters['storeTrainingPlan/getTrainingPlan'].map((item) => {
+        return {
+          id: item.id,
+          count: countExercises++,
+          exerciseName: item.exerciseName,
+          trainingDay: item.trainingDay,
+          trainingDayFull: item.trainingDayFull,
+          exerciseTime: item.exerciseTime,
+          startingWeight: item.startingWeight,
+          additionalWeight: item.additionalWeight,
+          repetitionsNumber: item.repetitionsNumber,
+          exerciseSetNumber: item.exerciseSetNumber,
+          exerciseNotes: item.exerciseNotes,
+        };
+      })
     );
 
     const addExercise = () => {
@@ -233,6 +267,7 @@ export default {
         id: uid(),
         exerciseName: exerciseName.value.trim(),
         trainingDay: trainingDayNum,
+        trainingDayFull: trainingDay.value,
         startingWeight: parseInt(startingWeight.value),
         additionalWeight: parseFloat(additionalWeight.value),
         repetitionsNumber: parseInt(repetitionsNumber.value),
@@ -285,5 +320,8 @@ export default {
 .q-select__dialog {
   min-width: 250px !important;
   max-width: 300px !important;
+}
+.q-item {
+  padding: 10px 20px;
 }
 </style>

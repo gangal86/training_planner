@@ -12,6 +12,7 @@ const state = () => ({
       //   id: 'id1',
       //   exerciseName: 'Приседание',
       //   trainingDay: 1,
+      //   trainingDayFull: 'Понедельник',
       //   startingWeight: 30,
       //   additionalWeight: 2.5,
       //   repetitionsNumber: 8,
@@ -23,6 +24,7 @@ const state = () => ({
       //   id: 'id2',
       //   exerciseName: 'Отжимание от пола',
       //   trainingDay: 3,
+      //   trainingDayFull: 'Среда',
       //   startingWeight: 5,
       //   additionalWeight: 1.25,
       //   repetitionsNumber: 8,
@@ -34,6 +36,7 @@ const state = () => ({
       //   id: 'id3',
       //   exerciseName: 'Становая тяга',
       //   trainingDay: 5,
+      //   trainingDayFull: 'Пятница',
       //   startingWeight: 50,
       //   additionalWeight: 2.5,
       //   repetitionsNumber: 8,
@@ -45,6 +48,7 @@ const state = () => ({
       //   id: 'id4',
       //   exerciseName: 'Подтягивание на турнике',
       //   trainingDay: 5,
+      //   trainingDayFull: 'Пятница',
       //   startingWeight: 0,
       //   additionalWeight: 0,
       //   repetitionsNumber: 8,
@@ -128,7 +132,6 @@ const mutations = {
     LocalStorage.set('isTrainingCalendar', state.isTrainingCalendar);
   },
   deleteTrainingPlan(state) {
-    console.log('mut_deleteTrainingPlan')
     state.prepareTrainingPlan.trainingPlanPeriod = {};
     state.prepareTrainingPlan.trainingPlan = [];
     state.trainingCycle = [];

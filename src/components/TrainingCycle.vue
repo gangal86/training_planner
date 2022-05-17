@@ -1,10 +1,14 @@
 <template>
-  <q-btn
-    @click="isGenTrainingCycle = !isGenTrainingCycle"
-    color="primary"
-    label="Сгенерировать тренировочный цикл"
-    no-caps
-  />
+  <q-page-sticky position="top" :offset="[18, 18]">
+    <q-btn
+      @click="isGenTrainingCycle = !isGenTrainingCycle"
+      fab-mini
+      no-caps
+      padding="10px 14px"
+      label="Сгенерировать тренировочный цикл"
+      color="primary"
+    />
+  </q-page-sticky>
   <q-dialog v-model="isGenTrainingCycle">
     <q-card>
       <q-card-section>
