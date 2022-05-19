@@ -1,8 +1,9 @@
 <template>
-  <q-list separator style="margin: 80px 0px 80px 0px">
+  <q-list separator class="list-wrapper">
     <q-item
       v-for="exercise in trainingPlan"
       :key="exercise.id"
+      @click="showPopupEditDeleteExercise(exercise.id)"
       clickable
       v-ripple
       :class="{
@@ -167,6 +168,150 @@
     </q-card>
   </q-dialog>
 
+  <q-dialog v-model="isEditExercise">
+    <q-card>
+      <q-card-section>
+        <q-form @submit="editExercise" @reset="resetForm">
+          <q-input
+            outlined
+            dense
+            v-model="exerciseName"
+            label="Упражнение *"
+            lazy-rules
+            type="text"
+            :rules="[
+              (val) => !!val || '* Пожалуйста введите название упражнения',
+              (val) =>
+                val.length < 30 ||
+                'Пожалуйста используйте максимум 30 символов',
+            ]"
+          />
+          <q-select
+            outlined
+            dense
+            v-model="trainingDay"
+            :options="trainingDayOptions"
+            label="День тренировки *"
+            lazy-rules
+            :rules="[
+              (val) =>
+                (val && val.length > 0) || 'Пожалуйста введите день тренировки',
+            ]"
+          />
+
+          <q-input
+            outlined
+            dense
+            label="Время тренировки *"
+            v-model="exerciseTime"
+            lazy-rules
+            :rules="[
+              (val) =>
+                (val && val.length > 0) ||
+                'Пожалуйста введите время тренировки',
+            ]"
+          >
+            <template v-slot:append>
+              <q-icon name="access_time" class="cursor-pointer">
+                <q-popup-proxy
+                  cover
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-time v-model="exerciseTime" mask="HH:mm" format24h>
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Ok" color="primary" flat />
+                    </div>
+                  </q-time>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+
+          <q-input
+            outlined
+            dense
+            v-model="startingWeight"
+            label="Стартовый вес (кг) *"
+            lazy-rules
+            type="number"
+            :rules="[
+              (val) =>
+                (val > 0) || 'Пожалуйста введите стартовый вес',
+            ]"
+          />
+
+          <q-select
+            outlined
+            dense
+            v-model="additionalWeight"
+            :options="additionalWeightOptions"
+            label="Добавочный вес (кг) *"
+            lazy-rules
+            :rules="[
+              (val) =>
+                (val > 0) || 'Пожалуйста введите добавочный вес',
+            ]"
+          />
+
+          <q-input
+            outlined
+            dense
+            v-model="repetitionsNumber"
+            label="Количество повторений *"
+            lazy-rules
+            type="number"
+            :rules="[
+              (val) =>
+                (val > 0) ||
+                'Пожалуйста введите количество повторений',
+            ]"
+          />
+
+          <q-input
+            outlined
+            dense
+            v-model="exerciseSetNumber"
+            label="Количество подходов *"
+            lazy-rules
+            type="number"
+            :rules="[
+              (val) =>
+                (val > 0) ||
+                'Пожалуйста введите количество подходов',
+            ]"
+          />
+
+          <q-input
+            outlined
+            dense
+            v-model="exerciseNotes"
+            label="Заметки"
+            lazy-rules
+            type="text"
+            :rules="[
+              (val) =>
+                val.length < 30 ||
+                'Пожалуйста используйте максимум 30 символов',
+            ]"
+          />
+
+          <div class="q-mt-md">
+            <q-btn label="OK" type="submit" color="primary" />
+            <q-btn
+              label="Отмена"
+              type="reset"
+              color="primary"
+              flat
+              class="q-ml-sm"
+              v-close-popup
+            />
+          </div>
+        </q-form>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
+
   <q-page-sticky position="bottom" :offset="[18, 18]">
     <q-btn
       @click="isAddExercise = !isAddExercise"
@@ -179,7 +324,7 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue';
-import { uid } from 'quasar';
+import { uid, useQuasar } from 'quasar';
 import { useStore } from 'vuex';
 import { useNotifSchedule } from 'src/use/useNotifSchedule';
 
@@ -189,16 +334,20 @@ export default {
   emits: ['update:modelValue'],
   setup(props, context) {
     const store = useStore();
+    const $q = useQuasar();
     const { cordovaNotifSchedule } = useNotifSchedule();
     const isAddExercise = ref(false);
+    const isEditExercise = ref(false);
     const exerciseName = ref('');
-    const trainingDay = ref('');
-    const startingWeight = ref('');
+    const trainingDay = ref(0);
+    const startingWeight = ref(0);
     const additionalWeight = ref('');
-    const repetitionsNumber = ref('');
-    const exerciseSetNumber = ref('');
+    const repetitionsNumber = ref(0);
+    const exerciseSetNumber = ref(0);
     const exerciseTime = ref('00:00');
     const exerciseNotes = ref('');
+    const currentExerciseId = ref('');
+    const currentExerciseTrainingDay = ref(1);;
     const trainingDayOptions = [
       'Понедельник',
       'Вторник',
@@ -280,6 +429,50 @@ export default {
       context.emit('update:modelValue', true);
     };
 
+    const editExercise = () => {
+      let trainingDayNum = currentExerciseTrainingDay.value;
+      switch (trainingDay.value) {
+        case 'Понедельник':
+          trainingDayNum = 1;
+          break;
+        case 'Вторник':
+          trainingDayNum = 2;
+          break;
+        case 'Среда':
+          trainingDayNum = 3;
+          break;
+        case 'Четверг':
+          trainingDayNum = 4;
+          break;
+        case 'Пятница':
+          trainingDayNum = 5;
+          break;
+        case 'Суббота':
+          trainingDayNum = 6;
+          break;
+        case 'Воскресенье':
+          trainingDayNum = 7;
+          break;
+      }
+
+      const exerciseData = {
+        id: currentExerciseId.value,
+        exerciseName: exerciseName.value.trim(),
+        trainingDay: trainingDayNum,
+        trainingDayFull: trainingDay.value,
+        startingWeight: parseInt(startingWeight.value),
+        additionalWeight: parseFloat(additionalWeight.value),
+        repetitionsNumber: parseInt(repetitionsNumber.value),
+        exerciseSetNumber: parseInt(exerciseSetNumber.value),
+        exerciseTime: exerciseTime.value,
+        exerciseNotes: exerciseNotes.value.trim(),
+      };
+      store.dispatch('storeTrainingPlan/editExercise', exerciseData);
+      resetForm();
+      isEditExercise.value = false;
+      countExercises = 1;
+    };
+
     const resetForm = () => {
       exerciseName.value = '';
       trainingDay.value = '';
@@ -292,12 +485,43 @@ export default {
       isAddExercise.value = false;
     };
 
+    const showPopupEditDeleteExercise = (id) => {
+      const currentExercise = trainingPlan.value.find((item) => item.id === id);
+      $q.dialog({
+        title: 'Упражнение №'+currentExercise.count,
+        message: currentExercise.exerciseName,
+        cancel: {
+          color: 'primary',
+          label: 'изменить'
+        },
+        ok: {
+          color: 'negative',
+          label: 'удалить'
+        }
+      }).onOk(() => {
+        store.dispatch('storeTrainingPlan/deleteExercise', id);
+      }).onCancel(() => {
+        exerciseName.value = currentExercise.exerciseName;
+        trainingDay.value = currentExercise.trainingDayFull;
+        startingWeight.value = currentExercise.startingWeight;
+        additionalWeight.value = currentExercise.additionalWeight;
+        repetitionsNumber.value = currentExercise.repetitionsNumber;
+        exerciseSetNumber.value = currentExercise.exerciseSetNumber;
+        exerciseTime.value = currentExercise.exerciseTime;
+        exerciseNotes.value = currentExercise.exerciseNotes;
+        currentExerciseId.value = currentExercise.id;
+        currentExerciseTrainingDay.value = currentExercise.trainingDay;
+        isEditExercise.value = true;
+      });
+    }
+
     onMounted(() => {
       //cordovaNotifSchedule();
     });
 
     return {
       isAddExercise,
+      isEditExercise,
       exerciseName,
       trainingDay,
       startingWeight,
@@ -309,7 +533,9 @@ export default {
       trainingDayOptions,
       additionalWeightOptions,
       trainingPlan,
+      showPopupEditDeleteExercise,
       addExercise,
+      editExercise,
       resetForm,
     };
   },
@@ -323,5 +549,9 @@ export default {
 }
 .q-item {
   padding: 10px 20px;
+}
+.list-wrapper {
+  margin: 80px 0px 80px 0px; 
+  max-width: 300px;
 }
 </style>

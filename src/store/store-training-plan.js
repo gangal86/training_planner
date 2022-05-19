@@ -143,6 +143,15 @@ const mutations = {
     LocalStorage.set('isTrainingProgram', state.isTrainingProgram);
     LocalStorage.set('isTrainingCycle', state.isTrainingCycle);
     LocalStorage.set('isTrainingCalendar', state.isTrainingCalendar);
+  },
+  deleteExercise(state, id) {
+    state.prepareTrainingPlan.trainingPlan = state.prepareTrainingPlan.trainingPlan.filter(item => item.id !== id);
+    LocalStorage.set('trainingPlan', state.prepareTrainingPlan.trainingPlan);
+  },
+  editExercise(state, payload) {
+    state.prepareTrainingPlan.trainingPlan = state.prepareTrainingPlan.trainingPlan.filter(item => item.id !== payload.id);
+    state.prepareTrainingPlan.trainingPlan.push(payload);
+    LocalStorage.set('trainingPlan', state.prepareTrainingPlan.trainingPlan);
   }
 };
 
@@ -167,6 +176,12 @@ const actions = {
   },
   deleteTrainingPlan({ commit }) {
     commit('deleteTrainingPlan');
+  },
+  deleteExercise({ commit }, id) {
+    commit('deleteExercise', id);
+  },
+  editExercise({ commit }, payload) {
+    commit('editExercise', payload);
   }
 };
 
