@@ -6,7 +6,36 @@ export function useExport() {
     monthsShort: 'Янв_Фев_Мар_Апр_Май_Июн_Июл_Авг_Сен_Окт_Ноя_Дек'.split('_'),
   }
 
+  function trainingDaySwitch(trainingDay, trainingDayNum) {
+    switch (trainingDay) {
+      case 'Понедельник':
+        trainingDayNum = 1
+        break
+      case 'Вторник':
+        trainingDayNum = 2
+        break
+      case 'Среда':
+        trainingDayNum = 3
+        break
+      case 'Четверг':
+        trainingDayNum = 4
+        break
+      case 'Пятница':
+        trainingDayNum = 5
+        break
+      case 'Суббота':
+        trainingDayNum = 6
+        break
+      case 'Воскресенье':
+        trainingDayNum = 7
+        break
+    }
+
+    return trainingDayNum
+  }
+
   return {
     calendarLocaleRu,
+    trainingDaySwitch,
   }
 }

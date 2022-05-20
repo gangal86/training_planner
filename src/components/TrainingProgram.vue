@@ -306,6 +306,7 @@ import { ref, computed, onMounted } from 'vue'
 import { uid, useQuasar } from 'quasar'
 import { useStore } from 'vuex'
 import { useNotifSchedule } from 'src/use/useNotifSchedule'
+import { useExport } from 'src/use/useExport'
 
 export default {
   name: 'TrainingProgram',
@@ -315,6 +316,7 @@ export default {
     const store = useStore()
     const $q = useQuasar()
     const { cordovaNotifSchedule } = useNotifSchedule()
+    const { trainingDaySwitch } = useExport()
     const isAddExercise = ref(false)
     const isEditExercise = ref(false)
     const exerciseName = ref('')
@@ -358,30 +360,7 @@ export default {
     )
 
     const addExercise = () => {
-      let trainingDayNum = 1
-      switch (trainingDay.value) {
-        case 'Понедельник':
-          trainingDayNum = 1
-          break
-        case 'Вторник':
-          trainingDayNum = 2
-          break
-        case 'Среда':
-          trainingDayNum = 3
-          break
-        case 'Четверг':
-          trainingDayNum = 4
-          break
-        case 'Пятница':
-          trainingDayNum = 5
-          break
-        case 'Суббота':
-          trainingDayNum = 6
-          break
-        case 'Воскресенье':
-          trainingDayNum = 7
-          break
-      }
+      let trainingDayNum = trainingDaySwitch(trainingDay.value, 1)
 
       const exerciseData = {
         id: uid(),
@@ -402,30 +381,7 @@ export default {
     }
 
     const editExercise = () => {
-      let trainingDayNum = currentExerciseTrainingDay.value
-      switch (trainingDay.value) {
-        case 'Понедельник':
-          trainingDayNum = 1
-          break
-        case 'Вторник':
-          trainingDayNum = 2
-          break
-        case 'Среда':
-          trainingDayNum = 3
-          break
-        case 'Четверг':
-          trainingDayNum = 4
-          break
-        case 'Пятница':
-          trainingDayNum = 5
-          break
-        case 'Суббота':
-          trainingDayNum = 6
-          break
-        case 'Воскресенье':
-          trainingDayNum = 7
-          break
-      }
+      let trainingDayNum = trainingDaySwitch(trainingDay.value, currentExerciseTrainingDay.value)
 
       const exerciseData = {
         id: currentExerciseId.value,
