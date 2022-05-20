@@ -79,6 +79,7 @@ export default {
       store.dispatch('storeTrainingPlan/updateIsTrainingProgram', true);
       store.dispatch('storeTrainingPlan/updateIsTrainingCycle', true);
       store.dispatch('storeTrainingPlan/updateIsTrainingCalendar', false);
+      leftDrawerOpen.value = !leftDrawerOpen.value;
     };
 
     const deleteTrainingPlan = () => {
@@ -92,11 +93,13 @@ export default {
         persistent: true
       }).onOk(() => {
         store.dispatch('storeTrainingPlan/deleteTrainingPlan');
+        leftDrawerOpen.value = !leftDrawerOpen.value;
       });
     };
 
     const showAboutProgram = () => {
       isAboutProgram.value = !isAboutProgram.value;
+      leftDrawerOpen.value = !leftDrawerOpen.value;
     };
 
     const toggleLeftDrawer = () => {

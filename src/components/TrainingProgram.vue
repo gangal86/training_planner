@@ -339,11 +339,11 @@ export default {
     const isAddExercise = ref(false);
     const isEditExercise = ref(false);
     const exerciseName = ref('');
-    const trainingDay = ref(0);
-    const startingWeight = ref(0);
+    const trainingDay = ref('');
+    const startingWeight = ref('');
     const additionalWeight = ref('');
-    const repetitionsNumber = ref(0);
-    const exerciseSetNumber = ref(0);
+    const repetitionsNumber = ref('');
+    const exerciseSetNumber = ref('');
     const exerciseTime = ref('00:00');
     const exerciseNotes = ref('');
     const currentExerciseId = ref('');
@@ -427,6 +427,7 @@ export default {
       store.dispatch('storeTrainingPlan/addExercise', exerciseData);
       resetForm();
       context.emit('update:modelValue', true);
+      countExercises = 1;
     };
 
     const editExercise = () => {
@@ -500,6 +501,7 @@ export default {
         }
       }).onOk(() => {
         store.dispatch('storeTrainingPlan/deleteExercise', id);
+        countExercises = 1;
       }).onCancel(() => {
         exerciseName.value = currentExercise.exerciseName;
         trainingDay.value = currentExercise.trainingDayFull;
@@ -516,7 +518,7 @@ export default {
     }
 
     onMounted(() => {
-      //cordovaNotifSchedule();
+      cordovaNotifSchedule();
     });
 
     return {
