@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 400px;">
+  <div style="max-width: 400px">
     <div class="row justify-center">
       <q-date
         v-model="dateNow"
@@ -17,12 +17,30 @@
           <template v-for="exercise in allExercises" :key="exercise.id">
             <q-item v-if="exercise.exerciseDate === dateNow.toString()">
               <q-item-section>
-                <div>Упражнение: <span class="text-weight-bold">{{ exercise.exerciseName }}</span></div>
-                <div>Время тренировки: <span class="text-weight-bold">{{ exercise.exerciseTime }}</span></div>
-                <div>Рабочий вес: <span class="text-weight-bold">{{ exercise.operatingWeight }} кг</span></div>
-                <div>Количество повторений: <span class="text-weight-bold">{{ exercise.repetitionsNumber }}</span></div>
-                <div>Количество подходов: <span class="text-weight-bold">{{ exercise.exerciseSetNumber }}</span></div>
-                <div>Заметки: <span class="text-weight-bold">{{ exercise.exerciseNotes }}</span></div>
+                <div>
+                  Упражнение:
+                  <span class="text-weight-bold">{{ exercise.exerciseName }}</span>
+                </div>
+                <div>
+                  Время тренировки:
+                  <span class="text-weight-bold">{{ exercise.exerciseTime }}</span>
+                </div>
+                <div>
+                  Рабочий вес:
+                  <span class="text-weight-bold">{{ exercise.operatingWeight }} кг</span>
+                </div>
+                <div>
+                  Количество повторений:
+                  <span class="text-weight-bold">{{ exercise.repetitionsNumber }}</span>
+                </div>
+                <div>
+                  Количество подходов:
+                  <span class="text-weight-bold">{{ exercise.exerciseSetNumber }}</span>
+                </div>
+                <div>
+                  Заметки:
+                  <span class="text-weight-bold">{{ exercise.exerciseNotes }}</span>
+                </div>
               </q-item-section>
             </q-item>
           </template>
@@ -33,33 +51,33 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue';
-import { useStore } from 'vuex';
-import { date } from 'quasar';
-import { useExport } from 'src/use/useExport';
+import { computed, ref } from 'vue'
+import { useStore } from 'vuex'
+import { date } from 'quasar'
+import { useExport } from 'src/use/useExport'
 
 export default {
   setup() {
-    const store = useStore();
-    const isAddExercise = ref(false);
-    const { calendarLocaleRu } = useExport();
+    const store = useStore()
+    const isAddExercise = ref(false)
+    const { calendarLocaleRu } = useExport()
 
-    const dateNow = ref(date.formatDate(Date.now(), 'YYYY/MM/DD'));
+    const dateNow = ref(date.formatDate(Date.now(), 'YYYY/MM/DD'))
 
     const allExercises = computed(
       () => store.getters['storeTrainingPlan/getAllExercises']
-    );
+    )
 
     const allExercisesDates = computed(
       () => store.getters['storeTrainingPlan/getAllExercisesDates']
-    );
+    )
     return {
       isAddExercise,
       allExercisesDates,
       dateNow,
       allExercises,
       calendarLocaleRu,
-    };
+    }
   },
-};
+}
 </script>

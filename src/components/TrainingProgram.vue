@@ -12,14 +12,38 @@
       }"
     >
       <q-item-section>
-        <div>Упражнение №{{ exercise.count }}: <span class="text-weight-bold">{{ exercise.exerciseName }}</span></div>
-        <div>День тренировки: <span class="text-weight-bold">{{ exercise.trainingDayFull }}</span></div>
-        <div>Время тренировки: <span class="text-weight-bold">{{ exercise.exerciseTime }}</span></div>
-        <div>Стартовый вес: <span class="text-weight-bold">{{ exercise.startingWeight }} кг</span></div>
-        <div>Добавочный вес: <span class="text-weight-bold">{{ exercise.additionalWeight }} кг</span></div>
-        <div>Количество повторений: <span class="text-weight-bold">{{ exercise.repetitionsNumber }}</span></div>
-        <div>Количество подходов: <span class="text-weight-bold">{{ exercise.exerciseSetNumber }}</span></div>
-        <div>Заметки: <span class="text-weight-bold">{{ exercise.exerciseNotes }}</span></div>
+        <div>
+          Упражнение №{{ exercise.count }}:
+          <span class="text-weight-bold">{{ exercise.exerciseName }}</span>
+        </div>
+        <div>
+          День тренировки:
+          <span class="text-weight-bold">{{ exercise.trainingDayFull }}</span>
+        </div>
+        <div>
+          Время тренировки:
+          <span class="text-weight-bold">{{ exercise.exerciseTime }}</span>
+        </div>
+        <div>
+          Стартовый вес:
+          <span class="text-weight-bold">{{ exercise.startingWeight }} кг</span>
+        </div>
+        <div>
+          Добавочный вес:
+          <span class="text-weight-bold">{{ exercise.additionalWeight }} кг</span>
+        </div>
+        <div>
+          Количество повторений:
+          <span class="text-weight-bold">{{ exercise.repetitionsNumber }}</span>
+        </div>
+        <div>
+          Количество подходов:
+          <span class="text-weight-bold">{{ exercise.exerciseSetNumber }}</span>
+        </div>
+        <div>
+          Заметки:
+          <span class="text-weight-bold">{{ exercise.exerciseNotes }}</span>
+        </div>
       </q-item-section>
     </q-item>
   </q-list>
@@ -37,9 +61,7 @@
             type="text"
             :rules="[
               (val) => !!val || '* Пожалуйста введите название упражнения',
-              (val) =>
-                val.length < 30 ||
-                'Пожалуйста используйте максимум 30 символов',
+              (val) => val.length < 30 || 'Пожалуйста используйте максимум 30 символов',
             ]"
           />
           <q-select
@@ -50,8 +72,7 @@
             label="День тренировки *"
             lazy-rules
             :rules="[
-              (val) =>
-                (val && val.length > 0) || 'Пожалуйста введите день тренировки',
+              (val) => (val && val.length > 0) || 'Пожалуйста введите день тренировки',
             ]"
           />
 
@@ -62,18 +83,12 @@
             v-model="exerciseTime"
             lazy-rules
             :rules="[
-              (val) =>
-                (val && val.length > 0) ||
-                'Пожалуйста введите время тренировки',
+              (val) => (val && val.length > 0) || 'Пожалуйста введите время тренировки',
             ]"
           >
             <template v-slot:append>
               <q-icon name="access_time" class="cursor-pointer">
-                <q-popup-proxy
-                  cover
-                  transition-show="scale"
-                  transition-hide="scale"
-                >
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                   <q-time v-model="exerciseTime" mask="HH:mm" format24h>
                     <div class="row items-center justify-end">
                       <q-btn v-close-popup label="Ok" color="primary" flat />
@@ -92,8 +107,7 @@
             lazy-rules
             type="number"
             :rules="[
-              (val) =>
-                (val && val.length > 0) || 'Пожалуйста введите стартовый вес',
+              (val) => (val && val.length > 0) || 'Пожалуйста введите стартовый вес',
             ]"
           />
 
@@ -105,8 +119,7 @@
             label="Добавочный вес (кг) *"
             lazy-rules
             :rules="[
-              (val) =>
-                (val && val.length > 0) || 'Пожалуйста введите добавочный вес',
+              (val) => (val && val.length > 0) || 'Пожалуйста введите добавочный вес',
             ]"
           />
 
@@ -119,8 +132,7 @@
             type="number"
             :rules="[
               (val) =>
-                (val && val.length > 0) ||
-                'Пожалуйста введите количество повторений',
+                (val && val.length > 0) || 'Пожалуйста введите количество повторений',
             ]"
           />
 
@@ -133,8 +145,7 @@
             type="number"
             :rules="[
               (val) =>
-                (val && val.length > 0) ||
-                'Пожалуйста введите количество подходов',
+                (val && val.length > 0) || 'Пожалуйста введите количество подходов',
             ]"
           />
 
@@ -146,9 +157,7 @@
             lazy-rules
             type="text"
             :rules="[
-              (val) =>
-                val.length < 30 ||
-                'Пожалуйста используйте максимум 30 символов',
+              (val) => val.length < 30 || 'Пожалуйста используйте максимум 30 символов',
             ]"
           />
 
@@ -181,9 +190,7 @@
             type="text"
             :rules="[
               (val) => !!val || '* Пожалуйста введите название упражнения',
-              (val) =>
-                val.length < 30 ||
-                'Пожалуйста используйте максимум 30 символов',
+              (val) => val.length < 30 || 'Пожалуйста используйте максимум 30 символов',
             ]"
           />
           <q-select
@@ -194,8 +201,7 @@
             label="День тренировки *"
             lazy-rules
             :rules="[
-              (val) =>
-                (val && val.length > 0) || 'Пожалуйста введите день тренировки',
+              (val) => (val && val.length > 0) || 'Пожалуйста введите день тренировки',
             ]"
           />
 
@@ -206,18 +212,12 @@
             v-model="exerciseTime"
             lazy-rules
             :rules="[
-              (val) =>
-                (val && val.length > 0) ||
-                'Пожалуйста введите время тренировки',
+              (val) => (val && val.length > 0) || 'Пожалуйста введите время тренировки',
             ]"
           >
             <template v-slot:append>
               <q-icon name="access_time" class="cursor-pointer">
-                <q-popup-proxy
-                  cover
-                  transition-show="scale"
-                  transition-hide="scale"
-                >
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                   <q-time v-model="exerciseTime" mask="HH:mm" format24h>
                     <div class="row items-center justify-end">
                       <q-btn v-close-popup label="Ok" color="primary" flat />
@@ -235,10 +235,7 @@
             label="Стартовый вес (кг) *"
             lazy-rules
             type="number"
-            :rules="[
-              (val) =>
-                (val > 0) || 'Пожалуйста введите стартовый вес',
-            ]"
+            :rules="[(val) => val > 0 || 'Пожалуйста введите стартовый вес']"
           />
 
           <q-select
@@ -248,10 +245,7 @@
             :options="additionalWeightOptions"
             label="Добавочный вес (кг) *"
             lazy-rules
-            :rules="[
-              (val) =>
-                (val > 0) || 'Пожалуйста введите добавочный вес',
-            ]"
+            :rules="[(val) => val > 0 || 'Пожалуйста введите добавочный вес']"
           />
 
           <q-input
@@ -261,11 +255,7 @@
             label="Количество повторений *"
             lazy-rules
             type="number"
-            :rules="[
-              (val) =>
-                (val > 0) ||
-                'Пожалуйста введите количество повторений',
-            ]"
+            :rules="[(val) => val > 0 || 'Пожалуйста введите количество повторений']"
           />
 
           <q-input
@@ -275,11 +265,7 @@
             label="Количество подходов *"
             lazy-rules
             type="number"
-            :rules="[
-              (val) =>
-                (val > 0) ||
-                'Пожалуйста введите количество подходов',
-            ]"
+            :rules="[(val) => val > 0 || 'Пожалуйста введите количество подходов']"
           />
 
           <q-input
@@ -290,9 +276,7 @@
             lazy-rules
             type="text"
             :rules="[
-              (val) =>
-                val.length < 30 ||
-                'Пожалуйста используйте максимум 30 символов',
+              (val) => val.length < 30 || 'Пожалуйста используйте максимум 30 символов',
             ]"
           />
 
@@ -313,41 +297,36 @@
   </q-dialog>
 
   <q-page-sticky position="bottom" :offset="[18, 18]">
-    <q-btn
-      @click="isAddExercise = !isAddExercise"
-      fab
-      icon="add"
-      color="primary"
-    />
+    <q-btn @click="isAddExercise = !isAddExercise" fab icon="add" color="primary" />
   </q-page-sticky>
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue';
-import { uid, useQuasar } from 'quasar';
-import { useStore } from 'vuex';
-import { useNotifSchedule } from 'src/use/useNotifSchedule';
+import { ref, computed, onMounted } from 'vue'
+import { uid, useQuasar } from 'quasar'
+import { useStore } from 'vuex'
+import { useNotifSchedule } from 'src/use/useNotifSchedule'
 
 export default {
   name: 'TrainingProgram',
   props: ['modelValue'],
   emits: ['update:modelValue'],
   setup(props, context) {
-    const store = useStore();
-    const $q = useQuasar();
-    const { cordovaNotifSchedule } = useNotifSchedule();
-    const isAddExercise = ref(false);
-    const isEditExercise = ref(false);
-    const exerciseName = ref('');
-    const trainingDay = ref('');
-    const startingWeight = ref('');
-    const additionalWeight = ref('');
-    const repetitionsNumber = ref('');
-    const exerciseSetNumber = ref('');
-    const exerciseTime = ref('00:00');
-    const exerciseNotes = ref('');
-    const currentExerciseId = ref('');
-    const currentExerciseTrainingDay = ref(1);;
+    const store = useStore()
+    const $q = useQuasar()
+    const { cordovaNotifSchedule } = useNotifSchedule()
+    const isAddExercise = ref(false)
+    const isEditExercise = ref(false)
+    const exerciseName = ref('')
+    const trainingDay = ref('')
+    const startingWeight = ref('')
+    const additionalWeight = ref('')
+    const repetitionsNumber = ref('')
+    const exerciseSetNumber = ref('')
+    const exerciseTime = ref('00:00')
+    const exerciseNotes = ref('')
+    const currentExerciseId = ref('')
+    const currentExerciseTrainingDay = ref(1)
     const trainingDayOptions = [
       'Понедельник',
       'Вторник',
@@ -356,17 +335,9 @@ export default {
       'Пятница',
       'Суббота',
       'Воскресенье',
-    ];
-    const additionalWeightOptions = [
-      '1.25',
-      '2.5',
-      '5',
-      '10',
-      '15',
-      '20',
-      '25',
-    ];
-    let countExercises = 1;
+    ]
+    const additionalWeightOptions = ['1.25', '2.5', '5', '10', '15', '20', '25']
+    let countExercises = 1
 
     const trainingPlan = computed(() =>
       store.getters['storeTrainingPlan/getTrainingPlan'].map((item) => {
@@ -382,34 +353,34 @@ export default {
           repetitionsNumber: item.repetitionsNumber,
           exerciseSetNumber: item.exerciseSetNumber,
           exerciseNotes: item.exerciseNotes,
-        };
+        }
       })
-    );
+    )
 
     const addExercise = () => {
-      let trainingDayNum = 1;
+      let trainingDayNum = 1
       switch (trainingDay.value) {
         case 'Понедельник':
-          trainingDayNum = 1;
-          break;
+          trainingDayNum = 1
+          break
         case 'Вторник':
-          trainingDayNum = 2;
-          break;
+          trainingDayNum = 2
+          break
         case 'Среда':
-          trainingDayNum = 3;
-          break;
+          trainingDayNum = 3
+          break
         case 'Четверг':
-          trainingDayNum = 4;
-          break;
+          trainingDayNum = 4
+          break
         case 'Пятница':
-          trainingDayNum = 5;
-          break;
+          trainingDayNum = 5
+          break
         case 'Суббота':
-          trainingDayNum = 6;
-          break;
+          trainingDayNum = 6
+          break
         case 'Воскресенье':
-          trainingDayNum = 7;
-          break;
+          trainingDayNum = 7
+          break
       }
 
       const exerciseData = {
@@ -423,37 +394,37 @@ export default {
         exerciseSetNumber: parseInt(exerciseSetNumber.value),
         exerciseTime: exerciseTime.value,
         exerciseNotes: exerciseNotes.value.trim(),
-      };
-      store.dispatch('storeTrainingPlan/addExercise', exerciseData);
-      resetForm();
-      context.emit('update:modelValue', true);
-      countExercises = 1;
-    };
+      }
+      store.dispatch('storeTrainingPlan/addExercise', exerciseData)
+      resetForm()
+      context.emit('update:modelValue', true)
+      countExercises = 1
+    }
 
     const editExercise = () => {
-      let trainingDayNum = currentExerciseTrainingDay.value;
+      let trainingDayNum = currentExerciseTrainingDay.value
       switch (trainingDay.value) {
         case 'Понедельник':
-          trainingDayNum = 1;
-          break;
+          trainingDayNum = 1
+          break
         case 'Вторник':
-          trainingDayNum = 2;
-          break;
+          trainingDayNum = 2
+          break
         case 'Среда':
-          trainingDayNum = 3;
-          break;
+          trainingDayNum = 3
+          break
         case 'Четверг':
-          trainingDayNum = 4;
-          break;
+          trainingDayNum = 4
+          break
         case 'Пятница':
-          trainingDayNum = 5;
-          break;
+          trainingDayNum = 5
+          break
         case 'Суббота':
-          trainingDayNum = 6;
-          break;
+          trainingDayNum = 6
+          break
         case 'Воскресенье':
-          trainingDayNum = 7;
-          break;
+          trainingDayNum = 7
+          break
       }
 
       const exerciseData = {
@@ -467,59 +438,62 @@ export default {
         exerciseSetNumber: parseInt(exerciseSetNumber.value),
         exerciseTime: exerciseTime.value,
         exerciseNotes: exerciseNotes.value.trim(),
-      };
-      store.dispatch('storeTrainingPlan/editExercise', exerciseData);
-      resetForm();
-      isEditExercise.value = false;
-      countExercises = 1;
-    };
+      }
+      store.dispatch('storeTrainingPlan/editExercise', exerciseData)
+      resetForm()
+      isEditExercise.value = false
+      countExercises = 1
+    }
 
     const resetForm = () => {
-      exerciseName.value = '';
-      trainingDay.value = '';
-      startingWeight.value = '';
-      additionalWeight.value = '';
-      repetitionsNumber.value = '';
-      exerciseSetNumber.value = '';
-      exerciseTime.value = '00:00';
-      exerciseNotes.value = '';
-      isAddExercise.value = false;
-    };
+      exerciseName.value = ''
+      trainingDay.value = ''
+      startingWeight.value = ''
+      additionalWeight.value = ''
+      repetitionsNumber.value = ''
+      exerciseSetNumber.value = ''
+      exerciseTime.value = '00:00'
+      exerciseNotes.value = ''
+      isAddExercise.value = false
+    }
 
     const showPopupEditDeleteExercise = (id) => {
-      const currentExercise = trainingPlan.value.find((item) => item.id === id);
+      const currentExercise = trainingPlan.value.find((item) => item.id === id)
       $q.dialog({
-        title: 'Упражнение №'+currentExercise.count,
+        title: 'Упражнение №' + currentExercise.count,
         message: currentExercise.exerciseName,
+        persistent: true,
         cancel: {
           color: 'primary',
-          label: 'изменить'
+          label: 'изменить',
         },
         ok: {
           color: 'negative',
-          label: 'удалить'
-        }
-      }).onOk(() => {
-        store.dispatch('storeTrainingPlan/deleteExercise', id);
-        countExercises = 1;
-      }).onCancel(() => {
-        exerciseName.value = currentExercise.exerciseName;
-        trainingDay.value = currentExercise.trainingDayFull;
-        startingWeight.value = currentExercise.startingWeight;
-        additionalWeight.value = currentExercise.additionalWeight;
-        repetitionsNumber.value = currentExercise.repetitionsNumber;
-        exerciseSetNumber.value = currentExercise.exerciseSetNumber;
-        exerciseTime.value = currentExercise.exerciseTime;
-        exerciseNotes.value = currentExercise.exerciseNotes;
-        currentExerciseId.value = currentExercise.id;
-        currentExerciseTrainingDay.value = currentExercise.trainingDay;
-        isEditExercise.value = true;
-      });
+          label: 'удалить',
+        },
+      })
+        .onOk(() => {
+          store.dispatch('storeTrainingPlan/deleteExercise', id)
+          countExercises = 1
+        })
+        .onCancel(() => {
+          exerciseName.value = currentExercise.exerciseName
+          trainingDay.value = currentExercise.trainingDayFull
+          startingWeight.value = currentExercise.startingWeight
+          additionalWeight.value = currentExercise.additionalWeight
+          repetitionsNumber.value = currentExercise.repetitionsNumber
+          exerciseSetNumber.value = currentExercise.exerciseSetNumber
+          exerciseTime.value = currentExercise.exerciseTime
+          exerciseNotes.value = currentExercise.exerciseNotes
+          currentExerciseId.value = currentExercise.id
+          currentExerciseTrainingDay.value = currentExercise.trainingDay
+          isEditExercise.value = true
+        })
     }
 
     onMounted(() => {
-      cordovaNotifSchedule();
-    });
+      cordovaNotifSchedule()
+    })
 
     return {
       isAddExercise,
@@ -539,9 +513,9 @@ export default {
       addExercise,
       editExercise,
       resetForm,
-    };
+    }
   },
-};
+}
 </script>
 
 <style lang="scss">
@@ -553,7 +527,7 @@ export default {
   padding: 10px 20px;
 }
 .list-wrapper {
-  margin: 80px 0px 80px 0px; 
+  margin: 80px 0px 80px 0px;
   max-width: 300px;
 }
 </style>

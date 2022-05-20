@@ -2,14 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title> Training Planner </q-toolbar-title>
       </q-toolbar>
@@ -57,30 +50,32 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
-import { useStore } from 'vuex';
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
 import { useQuasar } from 'quasar'
-import AboutProgramDialog from 'components/dialogs/AboutProgramDialog.vue';
+import AboutProgramDialog from 'components/dialogs/AboutProgramDialog.vue'
 
 export default {
   name: 'MainLayout',
   components: {
-    AboutProgramDialog
+    AboutProgramDialog,
   },
   setup() {
-    const store = useStore();
-    const $q = useQuasar();
-    const leftDrawerOpen = ref(false);
-    const isAboutProgram = ref(false);
+    const store = useStore()
+    const $q = useQuasar()
+    const leftDrawerOpen = ref(false)
+    const isAboutProgram = ref(false)
 
-    const isTrainingCycle = computed(() => store.getters['storeTrainingPlan/getIsTrainingCycle']);
+    const isTrainingCycle = computed(
+      () => store.getters['storeTrainingPlan/getIsTrainingCycle']
+    )
 
     const editTrainingPlan = () => {
-      store.dispatch('storeTrainingPlan/updateIsTrainingProgram', true);
-      store.dispatch('storeTrainingPlan/updateIsTrainingCycle', true);
-      store.dispatch('storeTrainingPlan/updateIsTrainingCalendar', false);
-      leftDrawerOpen.value = !leftDrawerOpen.value;
-    };
+      store.dispatch('storeTrainingPlan/updateIsTrainingProgram', true)
+      store.dispatch('storeTrainingPlan/updateIsTrainingCycle', true)
+      store.dispatch('storeTrainingPlan/updateIsTrainingCalendar', false)
+      leftDrawerOpen.value = !leftDrawerOpen.value
+    }
 
     const deleteTrainingPlan = () => {
       $q.dialog({
@@ -88,23 +83,23 @@ export default {
         message: 'Это действие необратимо',
         cancel: {
           flat: true,
-          label: 'отмена'
+          label: 'отмена',
         },
-        persistent: true
+        persistent: true,
       }).onOk(() => {
-        store.dispatch('storeTrainingPlan/deleteTrainingPlan');
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      });
-    };
+        store.dispatch('storeTrainingPlan/deleteTrainingPlan')
+        leftDrawerOpen.value = !leftDrawerOpen.value
+      })
+    }
 
     const showAboutProgram = () => {
-      isAboutProgram.value = !isAboutProgram.value;
-      leftDrawerOpen.value = !leftDrawerOpen.value;
-    };
+      isAboutProgram.value = !isAboutProgram.value
+      leftDrawerOpen.value = !leftDrawerOpen.value
+    }
 
     const toggleLeftDrawer = () => {
-      leftDrawerOpen.value = !leftDrawerOpen.value;
-    };
+      leftDrawerOpen.value = !leftDrawerOpen.value
+    }
 
     return {
       leftDrawerOpen,
@@ -114,7 +109,7 @@ export default {
       deleteTrainingPlan,
       showAboutProgram,
       toggleLeftDrawer,
-    };
+    }
   },
-};
+}
 </script>

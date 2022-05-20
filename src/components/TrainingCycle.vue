@@ -27,7 +27,7 @@
                 transition-show="scale"
                 transition-hide="scale"
               >
-                <q-date v-model="startTrainingPlanPeriod">
+                <q-date v-model="startTrainingPlanPeriod" :locale="calendarLocaleRu">
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Ok" color="primary" flat />
                   </div>
@@ -52,7 +52,7 @@
                 transition-show="scale"
                 transition-hide="scale"
               >
-                <q-date v-model="finishTrainingPlanPeriod">
+                <q-date v-model="finishTrainingPlanPeriod" :locale="calendarLocaleRu">
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Ok" color="primary" flat />
                   </div>
@@ -63,19 +63,8 @@
         </q-input>
 
         <div class="q-mt-md">
-          <q-btn
-            label="OK"
-            @click="genTrainingCycle"
-            color="primary"
-            v-close-popup
-          />
-          <q-btn
-            label="Отмена"
-            color="primary"
-            flat
-            class="q-ml-sm"
-            v-close-popup
-          />
+          <q-btn label="OK" @click="genTrainingCycle" color="primary" v-close-popup />
+          <q-btn label="Отмена" color="primary" flat class="q-ml-sm" v-close-popup />
         </div>
       </q-card-section>
     </q-card>
@@ -83,95 +72,85 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
-import { date, uid } from 'quasar';
-import { useStore } from 'vuex';
-import { useNotifSchedule } from 'src/use/useNotifSchedule';
+import { ref, computed } from 'vue'
+import { date, uid } from 'quasar'
+import { useStore } from 'vuex'
+import { useNotifSchedule } from 'src/use/useNotifSchedule'
+import { useExport } from 'src/use/useExport'
 
 export default {
   name: 'TrainingCycle',
   props: ['modelValue'],
   emits: ['update:modelValue', 'update:isTrainingProgram'],
   setup(props, context) {
-    const store = useStore();
-    const { cordovaNotifSchedule } = useNotifSchedule();
-    const isGenTrainingCycle = ref(false);
-    const startTrainingPlanPeriod = ref(
-      date.formatDate(Date.now(), 'YYYY/MM/DD')
-    );
-    const dateNowTrainingPlanPeriod = new Date(Date.now());
-    dateNowTrainingPlanPeriod.setDate(dateNowTrainingPlanPeriod.getDate() + 90);
+    const store = useStore()
+    const { calendarLocaleRu } = useExport()
+    const { cordovaNotifSchedule } = useNotifSchedule()
+    const isGenTrainingCycle = ref(false)
+    const startTrainingPlanPeriod = ref(date.formatDate(Date.now(), 'YYYY/MM/DD'))
+    const dateNowTrainingPlanPeriod = new Date(Date.now())
+    dateNowTrainingPlanPeriod.setDate(dateNowTrainingPlanPeriod.getDate() + 90)
     const finishTrainingPlanPeriod = ref(
       date.formatDate(dateNowTrainingPlanPeriod, 'YYYY/MM/DD')
-    );
+    )
 
     const genTrainingCycle = () => {
       const trainingPlanPeriod = {
         start: startTrainingPlanPeriod.value,
         finish: finishTrainingPlanPeriod.value,
-      };
-      store.dispatch(
-        'storeTrainingPlan/setTrainingPlanPeriod',
-        trainingPlanPeriod
-      );
+      }
+      store.dispatch('storeTrainingPlan/setTrainingPlanPeriod', trainingPlanPeriod)
       const prepareTrainingPlan = computed(
         () => store.getters['storeTrainingPlan/getPrepareTrainingPlan']
-      );
+      )
 
-      const readyTrainingCycle = [];
-      const prepareOperatingWeight = [];
+      const readyTrainingCycle = []
+      const prepareOperatingWeight = []
 
       let startTrainingPlanPeriodDate = new Date(
         prepareTrainingPlan.value.trainingPlanPeriod.start
-      );
-      let breakDate = '';
-      let currentDay = 1;
+      )
+      let breakDate = ''
+      let currentDay = 1
 
       prepareTrainingPlan.value.trainingPlan.forEach((item) => {
-        let currentOperatingWeight = item.startingWeight;
-        let generatedOperatingWeight = [];
+        let currentOperatingWeight = item.startingWeight
+        let generatedOperatingWeight = []
         while (true) {
-          breakDate = date.formatDate(
-            startTrainingPlanPeriodDate,
-            'YYYY/MM/DD'
-          );
+          breakDate = date.formatDate(startTrainingPlanPeriodDate, 'YYYY/MM/DD')
 
-          if (
-            breakDate == prepareTrainingPlan.value.trainingPlanPeriod.finish
-          ) {
+          if (breakDate == prepareTrainingPlan.value.trainingPlanPeriod.finish) {
             startTrainingPlanPeriodDate = new Date(
               prepareTrainingPlan.value.trainingPlanPeriod.start
-            );
-            break;
+            )
+            break
           }
 
-          currentDay = date.getDayOfWeek(startTrainingPlanPeriodDate);
-          generatedOperatingWeight.push(currentOperatingWeight);
-          currentOperatingWeight += item.additionalWeight;
-          startTrainingPlanPeriodDate.setDate(
-            startTrainingPlanPeriodDate.getDate() + 1
-          );
+          currentDay = date.getDayOfWeek(startTrainingPlanPeriodDate)
+          generatedOperatingWeight.push(currentOperatingWeight)
+          currentOperatingWeight += item.additionalWeight
+          startTrainingPlanPeriodDate.setDate(startTrainingPlanPeriodDate.getDate() + 1)
         }
         prepareOperatingWeight.push({
           id: item.id,
           generatedOperatingWeight: generatedOperatingWeight,
-        });
-      });
+        })
+      })
 
       startTrainingPlanPeriodDate = new Date(
         prepareTrainingPlan.value.trainingPlanPeriod.start
-      );
-      breakDate = '';
-      currentDay = 1;
+      )
+      breakDate = ''
+      currentDay = 1
 
       while (true) {
-        breakDate = date.formatDate(startTrainingPlanPeriodDate, 'YYYY/MM/DD');
+        breakDate = date.formatDate(startTrainingPlanPeriodDate, 'YYYY/MM/DD')
 
         if (breakDate == prepareTrainingPlan.value.trainingPlanPeriod.finish) {
-          break;
+          break
         }
 
-        currentDay = date.getDayOfWeek(startTrainingPlanPeriodDate);
+        currentDay = date.getDayOfWeek(startTrainingPlanPeriodDate)
 
         prepareTrainingPlan.value.trainingPlan.forEach((item) => {
           if (item.trainingDay == currentDay) {
@@ -189,28 +168,27 @@ export default {
                   exerciseTime: item.exerciseTime,
                   exerciseDate: breakDate,
                   exerciseNotes: item.exerciseNotes,
-                });
+                })
               }
-            });
+            })
           }
-        });
+        })
 
-        startTrainingPlanPeriodDate.setDate(
-          startTrainingPlanPeriodDate.getDate() + 1
-        );
+        startTrainingPlanPeriodDate.setDate(startTrainingPlanPeriodDate.getDate() + 1)
       }
-      store.dispatch('storeTrainingPlan/setTrainingCycle', readyTrainingCycle);
-      context.emit('update:modelValue', true);
-      context.emit('update:isTrainingProgram', false);
-      cordovaNotifSchedule();
-    };
+      store.dispatch('storeTrainingPlan/setTrainingCycle', readyTrainingCycle)
+      context.emit('update:modelValue', true)
+      context.emit('update:isTrainingProgram', false)
+      cordovaNotifSchedule()
+    }
 
     return {
       isGenTrainingCycle,
       startTrainingPlanPeriod,
       finishTrainingPlanPeriod,
+      calendarLocaleRu,
       genTrainingCycle,
-    };
+    }
   },
-};
+}
 </script>

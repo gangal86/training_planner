@@ -8,6 +8,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
+    "icons": "icongenie generate -i src/icon/icon_training_planner.png -b src/icon/background_training_planner.png --skip-trim --splashscreen-icon-ratio 0",
     "android-dev": "quasar dev -m cordova -T android",
     "android-build-apk": "quasar build -m cordova -T android -- --buildConfig=\"../build.cordova.json\" -- --packageType=apk",
     "android-build-bundle": "quasar build -m cordova -T android -- --buildConfig=\"../build.cordova.json\" -- --packageType=bundle"

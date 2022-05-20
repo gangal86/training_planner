@@ -1,6 +1,6 @@
-import { store } from "quasar/wrappers";
-import { createStore } from "vuex";
-import storeTrainingPlan from "./store-training-plan";
+import { store } from 'quasar/wrappers'
+import { createStore } from 'vuex'
+import storeTrainingPlan from './store-training-plan'
 
 // import example from './module-example'
 
@@ -23,7 +23,7 @@ export default store(function (/* { ssrContext } */) {
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only
     strict: process.env.DEBUGGING,
-  });
+  })
 
-  return Store;
-});
+  return Store
+})

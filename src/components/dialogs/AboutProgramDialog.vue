@@ -5,18 +5,12 @@
         <q-card>
           <q-card-section class="bg-primary text-white">
             <div class="text-h6">Training Planner</div>
-            <div class="text-subtitle2">
-              Планировщик тренировок по тяжелой атлетике
-            </div>
+            <div class="text-subtitle2">Планировщик тренировок по тяжелой атлетике</div>
           </q-card-section>
           <q-card-actions vertical align="left">
             <div class="text-subtitle2">
               <span class="text-weight-regular">Разработчик: </span>
-              <a
-                href="https://gangal.pro"
-                target="_blank"
-                class="about-program-link"
-              >
+              <a href="https://gangal.pro" target="_blank" class="about-program-link">
                 <span class="text-weight-bold text-primary">Roman Gangal</span>
               </a>
             </div>
@@ -31,7 +25,7 @@
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
   name: 'AboutProgramDialog',
@@ -40,18 +34,18 @@ export default defineComponent({
   setup(props, context) {
     const isAboutProgram = computed({
       get() {
-        return props.modelValue;
+        return props.modelValue
       },
       set(val) {
-        context.emit('update:modelValue', val);
+        context.emit('update:modelValue', val)
       },
-    });
+    })
 
     return {
       isAboutProgram,
-    };
+    }
   },
-});
+})
 </script>
 
 <style lang="scss" scoped>
