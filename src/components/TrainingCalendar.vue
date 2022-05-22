@@ -50,34 +50,21 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { date } from 'quasar'
 import { useExport } from 'src/use/useExport'
 
-export default {
-  setup() {
-    const store = useStore()
-    const isAddExercise = ref(false)
-    const { calendarLocaleRu } = useExport()
+const store = useStore()
+const isAddExercise = ref(false)
+const { calendarLocaleRu } = useExport()
 
-    const dateNow = ref(date.formatDate(Date.now(), 'YYYY/MM/DD'))
+const dateNow = ref(date.formatDate(Date.now(), 'YYYY/MM/DD'))
 
-    const allExercises = computed(
-      () => store.getters['storeTrainingPlan/getAllExercises']
-    )
+const allExercises = computed(() => store.getters['storeTrainingPlan/getAllExercises'])
 
-    const allExercisesDates = computed(
-      () => store.getters['storeTrainingPlan/getAllExercisesDates']
-    )
-    return {
-      isAddExercise,
-      allExercisesDates,
-      dateNow,
-      allExercises,
-      calendarLocaleRu,
-    }
-  },
-}
+const allExercisesDates = computed(
+  () => store.getters['storeTrainingPlan/getAllExercisesDates']
+)
 </script>

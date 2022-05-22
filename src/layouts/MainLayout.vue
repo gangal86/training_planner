@@ -49,67 +49,49 @@
   </q-layout>
 </template>
 
-<script>
+<script setup>
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useQuasar } from 'quasar'
 import AboutProgramDialog from 'components/dialogs/AboutProgramDialog.vue'
 
-export default {
-  name: 'MainLayout',
-  components: {
-    AboutProgramDialog,
-  },
-  setup() {
-    const store = useStore()
-    const $q = useQuasar()
-    const leftDrawerOpen = ref(false)
-    const isAboutProgram = ref(false)
+const store = useStore()
+const $q = useQuasar()
+const leftDrawerOpen = ref(false)
+const isAboutProgram = ref(false)
 
-    const isTrainingCycle = computed(
-      () => store.getters['storeTrainingPlan/getIsTrainingCycle']
-    )
+const isTrainingCycle = computed(
+  () => store.getters['storeTrainingPlan/getIsTrainingCycle']
+)
 
-    const editTrainingPlan = () => {
-      store.dispatch('storeTrainingPlan/updateIsTrainingProgram', true)
-      store.dispatch('storeTrainingPlan/updateIsTrainingCycle', true)
-      store.dispatch('storeTrainingPlan/updateIsTrainingCalendar', false)
-      leftDrawerOpen.value = !leftDrawerOpen.value
-    }
+const editTrainingPlan = () => {
+  store.dispatch('storeTrainingPlan/updateIsTrainingProgram', true)
+  store.dispatch('storeTrainingPlan/updateIsTrainingCycle', true)
+  store.dispatch('storeTrainingPlan/updateIsTrainingCalendar', false)
+  leftDrawerOpen.value = !leftDrawerOpen.value
+}
 
-    const deleteTrainingPlan = () => {
-      $q.dialog({
-        title: 'Удалить тренировочный план',
-        message: 'Это действие необратимо',
-        cancel: {
-          flat: true,
-          label: 'отмена',
-        },
-        persistent: true,
-      }).onOk(() => {
-        store.dispatch('storeTrainingPlan/deleteTrainingPlan')
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      })
-    }
+const deleteTrainingPlan = () => {
+  $q.dialog({
+    title: 'Удалить тренировочный план',
+    message: 'Это действие необратимо',
+    cancel: {
+      flat: true,
+      label: 'отмена',
+    },
+    persistent: true,
+  }).onOk(() => {
+    store.dispatch('storeTrainingPlan/deleteTrainingPlan')
+    leftDrawerOpen.value = !leftDrawerOpen.value
+  })
+}
 
-    const showAboutProgram = () => {
-      isAboutProgram.value = !isAboutProgram.value
-      leftDrawerOpen.value = !leftDrawerOpen.value
-    }
+const showAboutProgram = () => {
+  isAboutProgram.value = !isAboutProgram.value
+  leftDrawerOpen.value = !leftDrawerOpen.value
+}
 
-    const toggleLeftDrawer = () => {
-      leftDrawerOpen.value = !leftDrawerOpen.value
-    }
-
-    return {
-      leftDrawerOpen,
-      isTrainingCycle,
-      isAboutProgram,
-      editTrainingPlan,
-      deleteTrainingPlan,
-      showAboutProgram,
-      toggleLeftDrawer,
-    }
-  },
+const toggleLeftDrawer = () => {
+  leftDrawerOpen.value = !leftDrawerOpen.value
 }
 </script>

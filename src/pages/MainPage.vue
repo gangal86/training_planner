@@ -12,52 +12,36 @@
   </q-page>
 </template>
 
-<script>
+<script setup>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import TrainingProgram from '../components/TrainingProgram.vue'
 import TrainingCycle from '../components/TrainingCycle.vue'
 import TrainingCalendar from '../components/TrainingCalendar.vue'
 
-export default {
-  name: 'MainPage',
-  components: {
-    TrainingProgram,
-    TrainingCycle,
-    TrainingCalendar,
+const store = useStore()
+const isTrainingProgram = computed({
+  get() {
+    return store.getters['storeTrainingPlan/getIsTrainingProgram']
   },
-  setup() {
-    const store = useStore()
-    const isTrainingProgram = computed({
-      get() {
-        return store.getters['storeTrainingPlan/getIsTrainingProgram']
-      },
-      set(value) {
-        store.dispatch('storeTrainingPlan/updateIsTrainingProgram', value)
-      },
-    })
-    const isTrainingCycle = computed({
-      get() {
-        return store.getters['storeTrainingPlan/getIsTrainingCycle']
-      },
-      set(value) {
-        store.dispatch('storeTrainingPlan/updateIsTrainingCycle', value)
-      },
-    })
-    const isTrainingCalendar = computed({
-      get() {
-        return store.getters['storeTrainingPlan/getIsTrainingCalendar']
-      },
-      set(value) {
-        store.dispatch('storeTrainingPlan/updateIsTrainingCalendar', value)
-      },
-    })
-
-    return {
-      isTrainingProgram,
-      isTrainingCycle,
-      isTrainingCalendar,
-    }
+  set(value) {
+    store.dispatch('storeTrainingPlan/updateIsTrainingProgram', value)
   },
-}
+})
+const isTrainingCycle = computed({
+  get() {
+    return store.getters['storeTrainingPlan/getIsTrainingCycle']
+  },
+  set(value) {
+    store.dispatch('storeTrainingPlan/updateIsTrainingCycle', value)
+  },
+})
+const isTrainingCalendar = computed({
+  get() {
+    return store.getters['storeTrainingPlan/getIsTrainingCalendar']
+  },
+  set(value) {
+    store.dispatch('storeTrainingPlan/updateIsTrainingCalendar', value)
+  },
+})
 </script>

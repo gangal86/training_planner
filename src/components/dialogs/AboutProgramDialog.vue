@@ -24,26 +24,18 @@
   </q-dialog>
 </template>
 
-<script>
-import { defineComponent, computed } from 'vue'
+<script setup>
+import { computed } from 'vue'
 
-export default defineComponent({
-  name: 'AboutProgramDialog',
-  props: ['modelValue'],
-  emits: ['update:modelValue'],
-  setup(props, context) {
-    const isAboutProgram = computed({
-      get() {
-        return props.modelValue
-      },
-      set(val) {
-        context.emit('update:modelValue', val)
-      },
-    })
+const props = defineProps(['modelValue'])
+const emit = defineEmits(['update:modelValue'])
 
-    return {
-      isAboutProgram,
-    }
+const isAboutProgram = computed({
+  get() {
+    return props.modelValue
+  },
+  set(val) {
+    emit('update:modelValue', val)
   },
 })
 </script>

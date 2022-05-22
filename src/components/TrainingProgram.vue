@@ -301,177 +301,156 @@
   </q-page-sticky>
 </template>
 
-<script>
+<script setup>
 import { ref, computed, onMounted } from 'vue'
 import { uid, useQuasar } from 'quasar'
 import { useStore } from 'vuex'
 import { useNotifSchedule } from 'src/use/useNotifSchedule'
 import { useExport } from 'src/use/useExport'
 
-export default {
-  name: 'TrainingProgram',
-  props: ['modelValue'],
-  emits: ['update:modelValue'],
-  setup(props, context) {
-    const store = useStore()
-    const $q = useQuasar()
-    const { cordovaNotifSchedule } = useNotifSchedule()
-    const { trainingDaySwitch } = useExport()
-    const isAddExercise = ref(false)
-    const isEditExercise = ref(false)
-    const exerciseName = ref('')
-    const trainingDay = ref('')
-    const startingWeight = ref('')
-    const additionalWeight = ref('')
-    const repetitionsNumber = ref('')
-    const exerciseSetNumber = ref('')
-    const exerciseTime = ref('00:00')
-    const exerciseNotes = ref('')
-    const currentExerciseId = ref('')
-    const currentExerciseTrainingDay = ref(1)
-    const trainingDayOptions = [
-      'Понедельник',
-      'Вторник',
-      'Среда',
-      'Четверг',
-      'Пятница',
-      'Суббота',
-      'Воскресенье',
-    ]
-    const additionalWeightOptions = ['1.25', '2.5', '5', '10', '15', '20', '25']
-    let countExercises = 1
+const props = defineProps(['modelValue'])
+const emit = defineEmits(['update:modelValue'])
 
-    const trainingPlan = computed(() =>
-      store.getters['storeTrainingPlan/getTrainingPlan'].map((item) => {
-        return {
-          id: item.id,
-          count: countExercises++,
-          exerciseName: item.exerciseName,
-          trainingDay: item.trainingDay,
-          trainingDayFull: item.trainingDayFull,
-          exerciseTime: item.exerciseTime,
-          startingWeight: item.startingWeight,
-          additionalWeight: item.additionalWeight,
-          repetitionsNumber: item.repetitionsNumber,
-          exerciseSetNumber: item.exerciseSetNumber,
-          exerciseNotes: item.exerciseNotes,
-        }
-      })
-    )
+const store = useStore()
+const $q = useQuasar()
+const { cordovaNotifSchedule } = useNotifSchedule()
+const { trainingDaySwitch } = useExport()
+const isAddExercise = ref(false)
+const isEditExercise = ref(false)
+const exerciseName = ref('')
+const trainingDay = ref('')
+const startingWeight = ref('')
+const additionalWeight = ref('')
+const repetitionsNumber = ref('')
+const exerciseSetNumber = ref('')
+const exerciseTime = ref('00:00')
+const exerciseNotes = ref('')
+const currentExerciseId = ref('')
+const currentExerciseTrainingDay = ref(1)
+const trainingDayOptions = [
+  'Понедельник',
+  'Вторник',
+  'Среда',
+  'Четверг',
+  'Пятница',
+  'Суббота',
+  'Воскресенье',
+]
+const additionalWeightOptions = ['1.25', '2.5', '5', '10', '15', '20', '25']
+let countExercises = 1
 
-    const addExercise = () => {
-      let trainingDayNum = trainingDaySwitch(trainingDay.value, 1)
-
-      const exerciseData = {
-        id: uid(),
-        exerciseName: exerciseName.value.trim(),
-        trainingDay: trainingDayNum,
-        trainingDayFull: trainingDay.value,
-        startingWeight: parseInt(startingWeight.value),
-        additionalWeight: parseFloat(additionalWeight.value),
-        repetitionsNumber: parseInt(repetitionsNumber.value),
-        exerciseSetNumber: parseInt(exerciseSetNumber.value),
-        exerciseTime: exerciseTime.value,
-        exerciseNotes: exerciseNotes.value.trim(),
-      }
-      store.dispatch('storeTrainingPlan/addExercise', exerciseData)
-      resetForm()
-      context.emit('update:modelValue', true)
-      countExercises = 1
-    }
-
-    const editExercise = () => {
-      let trainingDayNum = trainingDaySwitch(trainingDay.value, currentExerciseTrainingDay.value)
-
-      const exerciseData = {
-        id: currentExerciseId.value,
-        exerciseName: exerciseName.value.trim(),
-        trainingDay: trainingDayNum,
-        trainingDayFull: trainingDay.value,
-        startingWeight: parseInt(startingWeight.value),
-        additionalWeight: parseFloat(additionalWeight.value),
-        repetitionsNumber: parseInt(repetitionsNumber.value),
-        exerciseSetNumber: parseInt(exerciseSetNumber.value),
-        exerciseTime: exerciseTime.value,
-        exerciseNotes: exerciseNotes.value.trim(),
-      }
-      store.dispatch('storeTrainingPlan/editExercise', exerciseData)
-      resetForm()
-      isEditExercise.value = false
-      countExercises = 1
-    }
-
-    const resetForm = () => {
-      exerciseName.value = ''
-      trainingDay.value = ''
-      startingWeight.value = ''
-      additionalWeight.value = ''
-      repetitionsNumber.value = ''
-      exerciseSetNumber.value = ''
-      exerciseTime.value = '00:00'
-      exerciseNotes.value = ''
-      isAddExercise.value = false
-    }
-
-    const showPopupEditDeleteExercise = (id) => {
-      const currentExercise = trainingPlan.value.find((item) => item.id === id)
-      $q.dialog({
-        title: 'Упражнение №' + currentExercise.count,
-        message: currentExercise.exerciseName,
-        persistent: true,
-        cancel: {
-          color: 'primary',
-          label: 'изменить',
-        },
-        ok: {
-          color: 'negative',
-          label: 'удалить',
-        },
-      })
-        .onOk(() => {
-          store.dispatch('storeTrainingPlan/deleteExercise', id)
-          countExercises = 1
-        })
-        .onCancel(() => {
-          exerciseName.value = currentExercise.exerciseName
-          trainingDay.value = currentExercise.trainingDayFull
-          startingWeight.value = currentExercise.startingWeight
-          additionalWeight.value = currentExercise.additionalWeight
-          repetitionsNumber.value = currentExercise.repetitionsNumber
-          exerciseSetNumber.value = currentExercise.exerciseSetNumber
-          exerciseTime.value = currentExercise.exerciseTime
-          exerciseNotes.value = currentExercise.exerciseNotes
-          currentExerciseId.value = currentExercise.id
-          currentExerciseTrainingDay.value = currentExercise.trainingDay
-          isEditExercise.value = true
-        })
-    }
-
-    onMounted(() => {
-      cordovaNotifSchedule()
-    })
-
+const trainingPlan = computed(() =>
+  store.getters['storeTrainingPlan/getTrainingPlan'].map((item) => {
     return {
-      isAddExercise,
-      isEditExercise,
-      exerciseName,
-      trainingDay,
-      startingWeight,
-      additionalWeight,
-      repetitionsNumber,
-      exerciseSetNumber,
-      exerciseTime,
-      exerciseNotes,
-      trainingDayOptions,
-      additionalWeightOptions,
-      trainingPlan,
-      showPopupEditDeleteExercise,
-      addExercise,
-      editExercise,
-      resetForm,
+      id: item.id,
+      count: countExercises++,
+      exerciseName: item.exerciseName,
+      trainingDay: item.trainingDay,
+      trainingDayFull: item.trainingDayFull,
+      exerciseTime: item.exerciseTime,
+      startingWeight: item.startingWeight,
+      additionalWeight: item.additionalWeight,
+      repetitionsNumber: item.repetitionsNumber,
+      exerciseSetNumber: item.exerciseSetNumber,
+      exerciseNotes: item.exerciseNotes,
     }
-  },
+  })
+)
+
+const addExercise = () => {
+  let trainingDayNum = trainingDaySwitch(trainingDay.value, 1)
+
+  const exerciseData = {
+    id: uid(),
+    exerciseName: exerciseName.value.trim(),
+    trainingDay: trainingDayNum,
+    trainingDayFull: trainingDay.value,
+    startingWeight: parseInt(startingWeight.value),
+    additionalWeight: parseFloat(additionalWeight.value),
+    repetitionsNumber: parseInt(repetitionsNumber.value),
+    exerciseSetNumber: parseInt(exerciseSetNumber.value),
+    exerciseTime: exerciseTime.value,
+    exerciseNotes: exerciseNotes.value.trim(),
+  }
+  store.dispatch('storeTrainingPlan/addExercise', exerciseData)
+  resetForm()
+  emit('update:modelValue', true)
+  countExercises = 1
 }
+
+const editExercise = () => {
+  let trainingDayNum = trainingDaySwitch(
+    trainingDay.value,
+    currentExerciseTrainingDay.value
+  )
+
+  const exerciseData = {
+    id: currentExerciseId.value,
+    exerciseName: exerciseName.value.trim(),
+    trainingDay: trainingDayNum,
+    trainingDayFull: trainingDay.value,
+    startingWeight: parseInt(startingWeight.value),
+    additionalWeight: parseFloat(additionalWeight.value),
+    repetitionsNumber: parseInt(repetitionsNumber.value),
+    exerciseSetNumber: parseInt(exerciseSetNumber.value),
+    exerciseTime: exerciseTime.value,
+    exerciseNotes: exerciseNotes.value.trim(),
+  }
+  store.dispatch('storeTrainingPlan/editExercise', exerciseData)
+  resetForm()
+  isEditExercise.value = false
+  countExercises = 1
+}
+
+const resetForm = () => {
+  exerciseName.value = ''
+  trainingDay.value = ''
+  startingWeight.value = ''
+  additionalWeight.value = ''
+  repetitionsNumber.value = ''
+  exerciseSetNumber.value = ''
+  exerciseTime.value = '00:00'
+  exerciseNotes.value = ''
+  isAddExercise.value = false
+}
+
+const showPopupEditDeleteExercise = (id) => {
+  const currentExercise = trainingPlan.value.find((item) => item.id === id)
+  $q.dialog({
+    title: 'Упражнение №' + currentExercise.count,
+    message: currentExercise.exerciseName,
+    persistent: true,
+    cancel: {
+      color: 'primary',
+      label: 'изменить',
+    },
+    ok: {
+      color: 'negative',
+      label: 'удалить',
+    },
+  })
+    .onOk(() => {
+      store.dispatch('storeTrainingPlan/deleteExercise', id)
+      countExercises = 1
+    })
+    .onCancel(() => {
+      exerciseName.value = currentExercise.exerciseName
+      trainingDay.value = currentExercise.trainingDayFull
+      startingWeight.value = currentExercise.startingWeight
+      additionalWeight.value = currentExercise.additionalWeight
+      repetitionsNumber.value = currentExercise.repetitionsNumber
+      exerciseSetNumber.value = currentExercise.exerciseSetNumber
+      exerciseTime.value = currentExercise.exerciseTime
+      exerciseNotes.value = currentExercise.exerciseNotes
+      currentExerciseId.value = currentExercise.id
+      currentExerciseTrainingDay.value = currentExercise.trainingDay
+      isEditExercise.value = true
+    })
+}
+
+onMounted(() => {
+  cordovaNotifSchedule()
+})
 </script>
 
 <style lang="scss">
