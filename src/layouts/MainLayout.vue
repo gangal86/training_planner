@@ -2,32 +2,46 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-toolbar-title> Training Planner </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label header> Essential Links </q-item-label>
+        <q-item-label header> Меню </q-item-label>
+        <q-item v-if="isTrainingCycle" @click="editTrainingPlan" clickable>
+          <q-item-section avatar>
+            <q-icon name="edit" />
+          </q-item-section>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+          <q-item-section>
+            <q-item-label>Изменить тренировочный план</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item v-if="isTrainingCycle" @click="deleteTrainingPlan" clickable>
+          <q-item-section avatar>
+            <q-icon name="delete" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Удалить тренировочный план</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable @click="showAboutProgram">
+          <q-item-section avatar>
+            <q-icon name="bookmark_border" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>О программе</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
+
+    <AboutProgramDialog v-model="isAboutProgram" />
 
     <q-page-container>
       <router-view />
@@ -35,73 +49,49 @@
   </q-layout>
 </template>
 
-<script>
-import EssentialLink from "components/EssentialLink.vue";
+<script setup>
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useQuasar } from 'quasar'
+import AboutProgramDialog from 'components/dialogs/AboutProgramDialog.vue'
 
-const linksList = [
-  {
-    title: "Docs",
-    caption: "quasar.dev",
-    icon: "school",
-    link: "https://quasar.dev",
-  },
-  {
-    title: "Github",
-    caption: "github.com/quasarframework",
-    icon: "code",
-    link: "https://github.com/quasarframework",
-  },
-  {
-    title: "Discord Chat Channel",
-    caption: "chat.quasar.dev",
-    icon: "chat",
-    link: "https://chat.quasar.dev",
-  },
-  {
-    title: "Forum",
-    caption: "forum.quasar.dev",
-    icon: "record_voice_over",
-    link: "https://forum.quasar.dev",
-  },
-  {
-    title: "Twitter",
-    caption: "@quasarframework",
-    icon: "rss_feed",
-    link: "https://twitter.quasar.dev",
-  },
-  {
-    title: "Facebook",
-    caption: "@QuasarFramework",
-    icon: "public",
-    link: "https://facebook.quasar.dev",
-  },
-  {
-    title: "Quasar Awesome",
-    caption: "Community Quasar projects",
-    icon: "favorite",
-    link: "https://awesome.quasar.dev",
-  },
-];
+const store = useStore()
+const $q = useQuasar()
+const leftDrawerOpen = ref(false)
+const isAboutProgram = ref(false)
 
-import { defineComponent, ref } from "vue";
+const isTrainingCycle = computed(
+  () => store.getters['storeTrainingPlan/getIsTrainingCycle']
+)
 
-export default defineComponent({
-  name: "MainLayout",
+const editTrainingPlan = () => {
+  store.dispatch('storeTrainingPlan/updateIsTrainingProgram', true)
+  store.dispatch('storeTrainingPlan/updateIsTrainingCycle', true)
+  store.dispatch('storeTrainingPlan/updateIsTrainingCalendar', false)
+  leftDrawerOpen.value = !leftDrawerOpen.value
+}
 
-  components: {
-    EssentialLink,
-  },
+const deleteTrainingPlan = () => {
+  $q.dialog({
+    title: 'Удалить тренировочный план',
+    message: 'Это действие необратимо',
+    cancel: {
+      flat: true,
+      label: 'отмена',
+    },
+    persistent: true,
+  }).onOk(() => {
+    store.dispatch('storeTrainingPlan/deleteTrainingPlan')
+    leftDrawerOpen.value = !leftDrawerOpen.value
+  })
+}
 
-  setup() {
-    const leftDrawerOpen = ref(false);
+const showAboutProgram = () => {
+  isAboutProgram.value = !isAboutProgram.value
+  leftDrawerOpen.value = !leftDrawerOpen.value
+}
 
-    return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
-    };
-  },
-});
+const toggleLeftDrawer = () => {
+  leftDrawerOpen.value = !leftDrawerOpen.value
+}
 </script>
