@@ -41,7 +41,7 @@
           <span class="text-weight-bold">{{ exercise.exerciseSetNumber }}</span>
         </div>
         <div>
-          Заметки:
+          Заметки: 
           <span class="text-weight-bold">{{ exercise.exerciseNotes }}</span>
         </div>
       </q-item-section>
@@ -105,9 +105,8 @@
             v-model="startingWeight"
             label="Стартовый вес (кг) *"
             lazy-rules
-            type="number"
             :rules="[
-              (val) => (val && val.length > 0) || 'Пожалуйста введите стартовый вес',
+              (val) => (parseFloat(val) > 0) || 'Пожалуйста введите стартовый вес',
             ]"
           />
 
@@ -157,7 +156,7 @@
             lazy-rules
             type="text"
             :rules="[
-              (val) => val.length < 30 || 'Пожалуйста используйте максимум 30 символов',
+              (val) => val.length < 50 || 'Пожалуйста используйте максимум 50 символов',
             ]"
           />
 
@@ -234,8 +233,7 @@
             v-model="startingWeight"
             label="Стартовый вес (кг) *"
             lazy-rules
-            type="number"
-            :rules="[(val) => val > 0 || 'Пожалуйста введите стартовый вес']"
+            :rules="[(val) => parseFloat(val) > 0 || 'Пожалуйста введите стартовый вес']"
           />
 
           <q-select
@@ -276,7 +274,7 @@
             lazy-rules
             type="text"
             :rules="[
-              (val) => val.length < 30 || 'Пожалуйста используйте максимум 30 символов',
+              (val) => val.length < 50 || 'Пожалуйста используйте максимум 50 символов',
             ]"
           />
 
@@ -365,7 +363,7 @@ const addExercise = () => {
     exerciseName: exerciseName.value.trim(),
     trainingDay: trainingDayNum,
     trainingDayFull: trainingDay.value,
-    startingWeight: parseInt(startingWeight.value),
+    startingWeight: parseFloat(startingWeight.value),
     additionalWeight: parseFloat(additionalWeight.value),
     repetitionsNumber: parseInt(repetitionsNumber.value),
     exerciseSetNumber: parseInt(exerciseSetNumber.value),
@@ -389,7 +387,7 @@ const editExercise = () => {
     exerciseName: exerciseName.value.trim(),
     trainingDay: trainingDayNum,
     trainingDayFull: trainingDay.value,
-    startingWeight: parseInt(startingWeight.value),
+    startingWeight: parseFloat(startingWeight.value),
     additionalWeight: parseFloat(additionalWeight.value),
     repetitionsNumber: parseInt(repetitionsNumber.value),
     exerciseSetNumber: parseInt(exerciseSetNumber.value),
@@ -464,5 +462,6 @@ onMounted(() => {
 .list-wrapper {
   margin: 80px 0px 80px 0px;
   max-width: 300px;
+  word-break: break-all;
 }
 </style>
